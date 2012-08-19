@@ -4,11 +4,11 @@ float neuron::_activation(double buffered){
   return 1/(1 + exp(-1*buffered));
 }
 
-neuron::neuron(int nbr_of_inputs):_buffer(0), _ouput(-1), _weights(vector<double>(nbr_of_inputs)), _size(nbr_of_inputs), _index(0){
+neuron::neuron(int nbr_of_inputs):_buffer(0), _output(-1), _weights( std::vector<double>( abs(nbr_of_inputs) ) ), _size( abs(nbr_of_inputs) ), _index(0){
   rnd_weights();
 }
 
-neuron::neuron(const neuron & source):_buffer(source._buffer), _ouput(source._output), _weights(source._weights), _size(source._size), _index(source._index){}
+neuron::neuron(const neuron & source):_buffer(source._buffer), _output(source._output), _weights(source._weights), _size(source._size), _index(source._index){}
 
 neuron::~neuron(){}
 
@@ -26,7 +26,7 @@ void neuron::rnd_weights(double min, double max){
   int i;
 
   srand(time(NULL));
-  for(i=0; i<=size; i++){
+  for(i=0; i<=_size; i++){
     _weights[i] = ( rand()/(double)RAND_MAX ) * (max-min) + min;
   }
 }
@@ -34,15 +34,22 @@ void neuron::rnd_weights(double min, double max){
 void neuron::receive(double value){
   _index++;
   if(_index <= _size){
-    _buffer += weights[_index] * value;
+    _buffer += _weights[_index] * value;
   }
-  else throw "input index extends unit size";
+  else throw "neuron::receive(double) : input index extends unit size";
 }
 
-void neuron::receive(vector<double> & data){
+void neuron::receive(std::vector<double> & data){
   int i;
-  for(i=0; i < data.size() && i < _size; i++){
-    _receive(data[i]);
+  int data_size = data.size();
+
+  try{
+    for(i=0; i < data_size && i < _size; i++){
+      receive(data[i]);
+    }
+  }
+  catch(std::string){
+    throw "neuron::receive(std::vector<double>&) : input index extends unit size";
   }
 }
 
@@ -55,6 +62,10 @@ float neuron::evaluate(){
   return _output;
 }
 
+int neuron::input_index()const{return _index;}
+
+int neuron::size()const{return _size;}
+
 void neuron::reset(){
   _buffer = 0;
   _output = -1;
@@ -63,6 +74,7 @@ void neuron::reset(){
 
 void neuron::resize(int size, double minWeight, double maxWeight){
   int oldsize, i;
+  oldsize = _size;
 
   if(size >= 0){
     _size = size;
@@ -86,11 +98,11 @@ float neuron::output()const{return _output;}
 double neuron::getWeight(int i){
   if(0 <= i && i <= _size)
     return _weights[i];
-  else throw "weight index extends unit size";
+  else throw "neuron::output() : weight index extends unit size";
 }
 
 void neuron::setWeight(int i, double value){
   if(0 <= i && i <= _size)
     _weights[i] = value;
-  else throw "weight index extends unit size";
+  else throw "neuron::setWeight(int, double) : weight index extends unit size";
 }
