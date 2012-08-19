@@ -1,6 +1,7 @@
 /**
  *@file synaptic.hpp
  *@brief formal neural network connection
+ *@version 0.1
  *@author Josuah Aron
  *@date 19 August 2012
  *

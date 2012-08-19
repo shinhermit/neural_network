@@ -2,12 +2,12 @@
 
 network::network(){}
 
-network::network(int layers_num, int neuron_per_layer, int inputs_per_neuron){
-  int i, size;
+network::network(int layers_num, int neurons_per_layer, int inputs_per_neuron){
+  int i;
   perceptron p;
 
   for(i=0; i<layers_num; i++){
-    p = perceptron(neuron_per_layer, inputs_per_neuron);
+    p = perceptron(neurons_per_layer, inputs_per_neuron);
     _layers.push_back(p);
     _connexions.push_back( std::list<synaptic>() );
   }
@@ -26,12 +26,12 @@ network & network::operator=(const network & source){
 }
 
 
-void network::add_neuron(int layer, neuron neurone){
+void network::add_neuron(int layer, neuron cell){
   int num_of_layers;
 
   num_of_layers = _layers.size();
   if(0<=layer && layer<num_of_layers){
-    _layers[layer].add(neurone);
+    _layers[layer].add(cell);
   }
   else throw "network::add_neuron(int,neuron) : invalid layer index.";
 }
@@ -43,7 +43,7 @@ void network::rmv_neuron(int layer, int pos){
   if(0<=layer && layer<num_of_layers){
     theLayer_size = _layers[layer].size();
     if(0<=pos && pos < theLayer_size){
-      _layers[layer].erase(_layers.begin()+pos);
+      _layers[layer].remove(pos);
       disconnect_all( unit(layer, pos) );
     }
     else throw "network::rmv_neuron(int,int) : invalid neuron position.";
@@ -52,7 +52,7 @@ void network::rmv_neuron(int layer, int pos){
 }
 
 void network::add_layer(perceptron layer){
-  _layer.push_back(layer);
+  _layers.push_back(layer);
   _connexions.push_back( std::list<synaptic>() );
 }
 
@@ -65,8 +65,8 @@ void network::rmv_layer(int layer){
     for(pos=0; pos<size; pos++){
       disconnect_all( unit(layer, pos) );
     }
-    _layers.erase(layer);
-    _connexions.erase(layer);
+    _layers.erase(_layers.begin()+layer);
+    _connexions.erase(_connexions.begin()+layer);
   }
 }
 
@@ -83,33 +83,37 @@ void network::add_layers(int how_many, int layer_size, int neuron_size){
 
 void network::rmv_layers(int begin, int end){
   int num_of_layers, layer;
+
   layer = begin;
+  num_of_layers = _layers.size();
   while(layer <= end && layer < num_of_layers){
     rmv_layer(layer);
     layer++;
   }
 }
 
-bool valid_unit(unit cell){
+bool network::valid_unit(unit cell){
   int num_of_layers, theLayer_size;
+  bool valid;
+
+  valid = false;
   num_of_layers = _layers.size();
   if(0 <= cell.layer() && cell.layer() < num_of_layers){
     theLayer_size = _layers[cell.layer()].size();
     if(0 <= cell.pos() && cell.pos() < theLayer_size)
-      return true
+      return valid = true;
   }
-  else return false;
+  return valid;
 }
 
 bool network::registered_connection(synaptic synapse){
-  int layer, num_of_synapses;
+  int layer;
   synaptics::iterator it;
   bool found;
   
     found = false;
-  if( valid_unit(src) && valid_unit(dst) ){
-    layer = dst.layer();
-    num_of_synapses = _conexions[layer].size();
+    if( valid_unit(synapse.source()) && valid_unit(synapse.dest()) ){
+    layer = synapse.layer();
     it = _connexions[layer].begin();
     while(it != _connexions[layer].end() && !found){
       if(*it == synapse)
@@ -119,6 +123,29 @@ bool network::registered_connection(synaptic synapse){
     }
   }
   return found;
+}
+
+int network::find_connection(synaptic synapse){
+  int layer, i, pos;
+  synaptics::iterator it;
+  bool found;
+  
+    found = false;
+    if( valid_unit(synapse.source()) && valid_unit(synapse.dest()) ){
+    layer = synapse.layer();
+    i=0;
+    it = _connexions[layer].begin();
+    while(it != _connexions[layer].end() && !found){
+      if(*it == synapse)
+	found = true;
+      else
+	i++;
+
+      it++;
+    }
+  }
+    pos = found ? i : -1;
+    return pos;
 }
 
 bool network::are_connected(unit src, unit dst){
@@ -143,11 +170,15 @@ void network::connect(int src_layer, int src_pos, int dst_layer, int dst_pos){
 }
 
 void network::disconnect(synaptic synapse){
-  int layer;
+  int layer, pos, i;
+  synaptics::iterator it;
 
-  if( registered_connection(synapse) ){
+  pos = find_connection(synapse);
+  if(pos >= 0){
     layer = synapse.layer();
-    _connexions[layer].erase(synapse);
+    it = _connexions[layer].begin();
+    for(i=0; i<pos; i++) it++;
+    _connexions[layer].erase(it);
   }
   else throw "network::connect(synaptic) : given synapse argument not found in the network.";
 }
@@ -200,18 +231,18 @@ void network::synaptic_injection(int layer_index){
 
   num_of_layers = _layers.size();
   if(0 <= layer_index && layer_index < num_of_layers){
-    dest_layer = & _layer[layer_index];
+    dst_layer = & _layers[layer_index];
     connections = & _connexions[layer_index];
     for(it=connections->begin(); it!=connections->end(); it++){
       //incoming neuron
       index = it->dest().pos();
-      dst_neuron = & *dest_layer[index];
+      dst_neuron = & ((*dst_layer)[index]);
 
       //outgoing neuron
       index = it->source().layer();
       src_layer = & _layers[index];
       index = it->source().pos();
-      src_neuron = & *src_layer[index];
+      src_neuron = & (*src_layer)[index];
 
       //injection
       dst_neuron->receive( src_neuron->output() );
@@ -220,15 +251,16 @@ void network::synaptic_injection(int layer_index){
   else throw "network::synaptic_injection(int) : invalid layer index.";
 }
 
-std::vector<unit> network::succ(unit & src_unit){
+std::vector<unit> network::succ(unit src_unit){
   int layer_index, num_of_layers;
   synaptics::iterator it;
   std::vector<unit> receivers;
 
   if( valid_unit(src_unit) ){
     layer_index = src_unit.layer();
+    num_of_layers = _layers.size();
     while(layer_index < num_of_layers){
-      for(it=_connexion[layer_index].begin(); it!=_connexions[layer_index].end(); it++){
+      for(it=_connexions[layer_index].begin(); it!=_connexions[layer_index].end(); it++){
 	if(it->source() == src_unit){
 	  receivers.push_back( it->dest() );
 	}
@@ -249,7 +281,7 @@ std::vector<unit> network::succ(int src_layer, int src_pos){
   }
 }
 
-std::vector<unit> network::pred(unit & dst_unit){
+std::vector<unit> network::pred(unit dst_unit){
   int layer_index;
   synaptics::iterator it;
   std::vector<unit> senders;
@@ -257,7 +289,7 @@ std::vector<unit> network::pred(unit & dst_unit){
   if( valid_unit(dst_unit) ){
     layer_index = dst_unit.layer();
     while(layer_index >= 0){
-      for(it=_connexion[layer_index].begin(); it!=_connexions[layer_index].end(); it++){
+      for(it=_connexions[layer_index].begin(); it!=_connexions[layer_index].end(); it++){
 	if(it->dest() == dst_unit){
 	  senders.push_back( it->source() );
 	}
@@ -292,15 +324,21 @@ void network::evaluate(){
   int i, num_of_layers;
 
   num_of_layers = _layers.size();
-  for(i=0; i < num_of_layers; i++){
-    _layers[i].evaluate();
+  if(num_of_layers > 0){
+    //input layer evaluation
+    _layers[0].evaluate();
+
+    for(i=1; i < num_of_layers; i++){
+      synaptic_injection(i);
+      _layers[i].evaluate();
+    }
   }
 }
 
 std::vector<float> network::output(){
   int last;
 
-  //couche de sortie = dernière couche
+  //output layer = last layer
   last = _layers.size() - 1;
   return _layers[last].output();
 }
@@ -308,7 +346,7 @@ std::vector<float> network::output(){
 void network::reset(){
   int i, num_of_layers;
 
-  num_of_layers = _layers.num_of_layers();
+  num_of_layers = _layers.size();
   for(i=0; i < num_of_layers; i++){
     _layers[i].reset();
   }

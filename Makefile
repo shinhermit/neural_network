@@ -26,5 +26,9 @@ network: perceptron synaptic
 cleantemp:
 	rm *~
 
-cleanall: cleantemp
-	rm *.o; rm *.out
+cleanobj:
+	rm *.o
+distclean:
+	rm *.out
+
+cleanall: cleantemp cleanobj distclean

@@ -1,6 +1,7 @@
 /**
  *@file unit.hpp
  *@brief basic brick neural synaptic connections
+ *@version 0.1
  *@author Josuah ARON
  *@date 19 august 2012
  *
@@ -33,7 +34,7 @@ public:
    *@param layer parent layer indice
    *@param pos position in the parent layer
    */
-  unit(int, int);
+  unit(int=0, int=0);
 
   /**
    *@brief copy constructor
