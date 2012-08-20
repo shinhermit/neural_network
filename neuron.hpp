@@ -14,6 +14,8 @@
 #include <vector>
 #include <cmath>
 #include <cstdlib>
+#include <sstream>
+#include "neurals.hpp"
 
 /**
  *@class neuron
@@ -71,7 +73,7 @@ public:
    *@param  min weight value
    *@param  max weight value
    */
-  void rnd_weights(double=-0.5, double=0.5);
+  void rnd_weights(double=neurals::RND_MIN, double=neurals::RND_MAX);
 
   /**
    *@brief receives a new input
@@ -91,6 +93,12 @@ public:
    *@return result of the treatment by the unit
    */
   float evaluate();
+
+  /**
+   *@brief tell is neuron is active or not
+   *@return true if output > 0.5, false if not
+   */
+  bool is_active()const;
 
   /**
    *@brief resets the accumulator and the output
@@ -115,13 +123,20 @@ public:
    *@param min weight value for eventually new inputs
    *@param max weight value for eventually new inputs
    */
-  void resize(int=1, double=-0.5, double=0.5);
+  void resize(int=1, double=neurals::RND_MIN, double=neurals::RND_MIN);
 
   /**
    *@brief returns the last avaluated output
    *@return last processing result
    */
   float output()const;
+
+  /**
+   *@brief returns only 0 or 1
+   *Useful to create binary neurons (like in Hopfield architecture)
+   *@return last processing result
+   */
+  short binary_output()const;
 
   /**
    *@brief the i-th weight of the neuron
@@ -132,10 +147,17 @@ public:
 
   /**
    *@brief sets a value for a weight
+   *This method is useful to train the neuron (fine tunning the weights)
    *@param pos index of the weight
    *@param value new value
    */
   void setWeight(int, double);
+
+  /**
+   *@brief prints the current state of the neuron
+   *useful for testing
+   */
+  void print();
 };
 
 #endif

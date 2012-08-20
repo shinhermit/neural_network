@@ -4,7 +4,7 @@ float neuron::_activation(double buffered){
   return 1/(1 + exp(-1*buffered));
 }
 
-neuron::neuron(int nbr_of_inputs):_buffer(0), _output(-1), _weights( std::vector<double>( abs(nbr_of_inputs) ) ), _size( abs(nbr_of_inputs) ), _index(0){
+neuron::neuron(int nbr_of_inputs):_buffer(0), _output(neurals::UNEVALUATED), _weights( std::vector<double>( abs(nbr_of_inputs+1) ) ), _size( abs(nbr_of_inputs) ), _index(0){
   rnd_weights();
 }
 
@@ -36,7 +36,7 @@ void neuron::receive(double value){
   if(_index <= _size){
     _buffer += _weights[_index] * value;
   }
-  else throw "neuron::receive(double) : input index extends unit size";
+  else throw std::string("neuron::receive(double) : input index extends unit size");
 }
 
 void neuron::receive(std::vector<double> & data){
@@ -44,12 +44,12 @@ void neuron::receive(std::vector<double> & data){
   int data_size = data.size();
 
   try{
-    for(i=0; i < data_size && i < _size; i++){
+    for(i=0; i < data_size && _index < _size; i++){
       receive(data[i]);
     }
   }
   catch(std::string){
-    throw "neuron::receive(std::vector<double>&) : input index extends unit size";
+    throw std::string("neuron::receive(std::vector<double>&) : input index extends unit size");
   }
 }
 
@@ -62,13 +62,15 @@ float neuron::evaluate(){
   return _output;
 }
 
+bool neuron::is_active()const{return _output >= neurals::THRESHOLD;}
+
 int neuron::input_index()const{return _index;}
 
 int neuron::size()const{return _size;}
 
 void neuron::reset(){
   _buffer = 0;
-  _output = -1;
+  _output = neurals::UNEVALUATED;
   _index = 0;
 }
 
@@ -95,6 +97,13 @@ void neuron::resize(int size, double minWeight, double maxWeight){
 
 float neuron::output()const{return _output;}
 
+short neuron::binary_output()const{
+  short bin;
+
+  bin = (_output >= neurals::THRESHOLD) ? 1 : 0;
+  return bin;
+}
+
 double neuron::getWeight(int i){
   if(0 <= i && i <= _size)
     return _weights[i];
@@ -105,4 +114,18 @@ void neuron::setWeight(int i, double value){
   if(0 <= i && i <= _size)
     _weights[i] = value;
   else throw "neuron::setWeight(int, double) : weight index extends unit size";
+}
+
+void neuron::print(){
+  std::ostringstream oss;
+  int i;
+
+  oss << "weights: ( ";
+
+  for(i=0; i <= _size; i++)
+    oss<<_weights[i]<<" ";
+
+  oss<<")"<<std::endl<<"size:"<<_size<<std::endl<<"input index:"<<_index<<std::endl<<"buffer:"<<_buffer<<std::endl<<"output:"<<_output<<std::endl;
+
+  std::cout << oss.str();
 }
