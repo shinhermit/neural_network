@@ -7,47 +7,36 @@ int main(){
   cout<<endl<<"Creating neuron(3)..."<<endl;
   neuron cell(3);
   cell.print();
-  cin;
 
   cout<<endl<<"receiving input 1.2 ..."<<endl;
   cell.receive(1.2);
-  cell.print();
+  cout << cell;
 
-  cout<<endl<<"receiving input 2.3 ..."<<endl;
-  cell.receive(2.3);
-  cell.print();
-
-  cout<<endl<<"receiving input 3.4 ..."<<endl;
-  cell.receive(3.4);
-  cell.print();
+  cout<<endl<<"receiving inputs 2.3 and 3.4 ..."<<endl;
+  cell << 2.3 << 3.4;
+  cout << cell;
 
   cout<<endl<<"running neural evaluation ..."<<endl;
   cell.evaluate();
-  cell.print();
+  cout << cell;
 
-  cout<<endl<<"receiving input vector (0.1, 0.2, 0.3) ..."<<endl;
+  cout<<endl<<"receiving multiples inputs from vector (0.1, 0.2, 0.3) ..."<<endl;
   vector<double> data;
   data.push_back(0.1);
   data.push_back(0.2);
   data.push_back(0.3);
-  try{
-  cell.receive(data);
-  }
-  catch(string e){
-    cout<<endl<<e<<endl;
-    return 1;
-  }
-  cell.print();
+  cell<<data;
+  cout << cell;
 
   cout<<endl<<"Running neural evaluation ..."<<endl;
   cell.evaluate();
-  cell.print();
+  cout << cell;
 
   cout<<endl<<"changing weights ..."<<endl;
-  cell.setWeight(1, 0.2);
+  cell.setWeight(1, 0.1);
   cell.setWeight(2, 0.2);
   cell.setWeight(3, 0.3);
-  cell.print();
+  cout << cell;
 
   cout<<endl<<"testing observers methods ..."<<endl;
   cout<<"size(): "<<cell.size()<<endl;

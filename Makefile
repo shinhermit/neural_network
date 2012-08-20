@@ -19,11 +19,17 @@ test_neuron: neuron
 unit:
 	$(cc) -c -I$(inc) $(flags) $(src)/$@.cpp
 
+test_unit: unit
+	$(cc) -I$(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
 perceptron: neuron
 	$(cc) -c -I$(inc) $(flags) $(src)/$@.cpp
 
 synaptic: unit
 	$(cc) -c -I$(inc) $(flags) $(src)/$@.cpp
+
+test_synaptic: synaptic
+	$(cc) -I$(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
 
 network: perceptron synaptic
 	$(cc) -c -I$(inc) $(flags) $(src)/$@.cpp

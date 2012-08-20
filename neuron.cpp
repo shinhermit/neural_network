@@ -4,11 +4,11 @@ float neuron::_activation(double buffered){
   return 1/(1 + exp(-1*buffered));
 }
 
-neuron::neuron(int nbr_of_inputs):_buffer(0), _output(neurals::UNEVALUATED), _weights( std::vector<double>( abs(nbr_of_inputs+1) ) ), _size( abs(nbr_of_inputs) ), _index(0){
+neuron::neuron(int nbr_of_inputs): _size( abs(nbr_of_inputs) ), _weights( std::vector<double>( abs(nbr_of_inputs+1) ) ), _index(0), _buffer(0), _output(neurals::UNEVALUATED){
   rnd_weights();
 }
 
-neuron::neuron(const neuron & source):_buffer(source._buffer), _output(source._output), _weights(source._weights), _size(source._size), _index(source._index){}
+neuron::neuron(const neuron & source):_size(source._size), _weights(source._weights), _index(source._index), _buffer(source._buffer), _output(source._output){}
 
 neuron::~neuron(){}
 
@@ -22,6 +22,38 @@ neuron & neuron::operator=(const neuron & source){
   return *this;
 }
 
+std::ostream & operator<<(std::ostream & out, const neuron & cell){
+  int i;
+
+  out<<"("<<cell._size<< ", [";
+
+  for(i=0; i < cell._size; i++)
+    out<<cell._weights[i]<<"|";
+  if(i <= cell._size)
+    out<<cell._weights[i];
+
+  out<<"], "<<cell._index<<", "<<cell._buffer<<", "<<cell._output<<")";
+  return out;
+}
+
+neuron & neuron::operator<<(double value){
+  if(_index+1 <= _size){
+    _index++;
+    _buffer += _weights[_index] * value;
+  }
+  return *this;
+}
+
+neuron & neuron::operator<<(const std::vector<double> & data){
+  int i;
+  int data_size = data.size();
+
+  for(i=0; i < data_size && _index < _size; i++){
+    operator<<(data[i]); //appel de neuron::operator(double)
+  }
+  return *this;
+}
+
 void neuron::rnd_weights(double min, double max){
   int i;
 
@@ -32,14 +64,14 @@ void neuron::rnd_weights(double min, double max){
 }
 
 void neuron::receive(double value){
-  _index++;
-  if(_index <= _size){
+  if(_index+1 <= _size){
+    _index++;
     _buffer += _weights[_index] * value;
   }
   else throw std::string("neuron::receive(double) : input index extends unit size");
 }
 
-void neuron::receive(std::vector<double> & data){
+void neuron::receive(const std::vector<double> & data){
   int i;
   int data_size = data.size();
 
@@ -117,15 +149,14 @@ void neuron::setWeight(int i, double value){
 }
 
 void neuron::print(){
-  std::ostringstream oss;
   int i;
 
-  oss << "weights: ( ";
+  std::cout<<"(size:"<<_size<< ", weights: [";
 
-  for(i=0; i <= _size; i++)
-    oss<<_weights[i]<<" ";
+  for(i=0; i < _size; i++)
+    std::cout<<_weights[i]<<"|";
+  if(i <= _size)
+    std::cout<<_weights[i];
 
-  oss<<")"<<std::endl<<"size:"<<_size<<std::endl<<"input index:"<<_index<<std::endl<<"buffer:"<<_buffer<<std::endl<<"output:"<<_output<<std::endl;
-
-  std::cout << oss.str();
+  std::cout<<"], input index:"<<_index<<", buffer:"<<_buffer<<", output:"<<_output<<")"<<std::endl;
 }

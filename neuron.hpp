@@ -14,7 +14,6 @@
 #include <vector>
 #include <cmath>
 #include <cstdlib>
-#include <sstream>
 #include "neurals.hpp"
 
 /**
@@ -28,15 +27,15 @@
 class neuron
 {
 private:
-  double _buffer; /*!< weighted sum accumulator*/
-
-  float _output; /*!< last evaluated output */
+  int _size; /*!< number of inputs*/
 
   std::vector<double> _weights; /*!< table of the weights. Indice 0 is the biais*/
 
-  int _size; /*!< number of inputs*/
-
   int _index; /*!< currently indexed input (and weights)*/
+
+  double _buffer; /*!< weighted sum accumulator*/
+
+  float _output; /*!< last evaluated output */
 
   /**
    *@brief neural activation fonction
@@ -51,7 +50,7 @@ public:
    *@brief default constructor
    *@param size number of inputs of the neuron
    */
-  neuron(int=1);
+  neuron(int=neurals::MIN_INPUTS);
 
   /**
    *@brief copy constructor
@@ -67,6 +66,23 @@ public:
    *@brief operator =
    */
   neuron & operator=(const neuron &);
+
+  /**
+   *@brief operator <<
+   */
+  friend std::ostream & operator<<(std::ostream&, const neuron&);
+
+  /**
+   *@brief operator <<
+   *equivalent to neuron::receive(double)
+   */
+  neuron & operator<<(double);
+
+  /**
+   *@brief operator <<
+   *equivalent to neuron::receive(std::vector<double>&)
+   */
+  neuron & operator<<(const std::vector<double>&);
 
   /**
    *@brief randomly sets the weights
@@ -86,7 +102,7 @@ public:
    *@brief receives multiple inputs
    *@param data vector of inputs
    */
-  void receive(std::vector<double>&);
+  void receive(const std::vector<double>&);
 
   /**
    *@brief gives the output of the unit.
