@@ -1,6 +1,5 @@
 #include <iostream>
 #include "neuron.hpp"
-#include <initializer_list>
 
 using namespace std;
 
@@ -49,5 +48,13 @@ int main(){
   cell.setWeight(2, 0.2);
   cell.setWeight(3, 0.3);
   cell.print();
+
+  cout<<endl<<"testing observers methods ..."<<endl;
+  cout<<"size(): "<<cell.size()<<endl;
+  cout<<"input_index(): "<<cell.input_index()<<endl;
+  cout<<"output(): "<<cell.output()<<endl;
+  cout<<"binary_output(): "<<cell.binary_output()<<endl;
+  cout<<"is_active(): "<<cell.is_active()<<endl;
+  cout<<"getWeight() 1: "<<cell.getWeight(1)<<" | 2: "<<cell.getWeight(2)<<" | 3: "<<cell.getWeight(3)<<endl;
   return 0;
 }
