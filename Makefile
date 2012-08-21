@@ -22,6 +22,9 @@ unit:
 test_unit: unit
 	$(cc) -I$(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
 
+test_perceptron: perceptron
+	$(cc) -I$(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
 perceptron: neuron
 	$(cc) -c -I$(inc) $(flags) $(src)/$@.cpp
 

@@ -135,9 +135,9 @@ int main(){
     cout<<"false"<<endl;
 
   cout<<endl<<"printing units ..."<<endl;
-  cout<<"1: "; units[0].print();
-  cout<<"2: "; units[1].print();
-  cout<<"3: "; units[2].print();
+  cout<<"1: "; units[0].print(); cout<<endl;
+  cout<<"2: "; units[1].print(); cout<<endl;
+  cout<<"3: "<<units[2]<<endl;
 
   cout<<endl<<"unsing layer() and pos() observers ..."<<endl;
   cout<<"1: layer() -> "<<units[0].layer()<<" | pos() -> "<<units[0].pos()<<endl;
