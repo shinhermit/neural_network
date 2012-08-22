@@ -19,10 +19,12 @@
 namespace neurals
 {
   const float THRESHOLD = 0.5; /*!< activation limit (seuil)*/
-  const float UNEVALUATED = -1.0; /*!< output value before any evalaution*/
+  const float UNEVALUATED = -1.0; /*!< output value before any evaluation*/
   const double RND_MIN = -0.5; /*!< min value for random weights init*/
   const double RND_MAX = 0.5; /*!< max value for random weights init*/
   const int MIN_INPUTS = 1; /*!< min number of inputs of a neuron*/
+
+  typedef enum {FEED_FORWARD, BACKWARD_ALLOWED} type;
 };
 
 #endif

@@ -39,6 +39,15 @@ public:
   synaptic(unit, unit);
 
   /**
+   *@brief constructor
+   *@param src_layer layer of the source outputing unit
+   *@param src_pos position of the source outputing unit
+   *@param dst_layer of the destination inputing unit
+   *@param dst_pos position of the destination inputing unit
+   */
+  synaptic(int,int, int,int);
+
+  /**
    *@brief copy constructor
    */
   synaptic(const synaptic&);
@@ -83,6 +92,12 @@ public:
    *@return reference of inputing unit
    */
   unit & dest();
+
+  /**
+   *@brief prints the current state of the neuron
+   *useful for testing
+   */
+  void print();
 };
 
 #endif

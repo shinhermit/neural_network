@@ -26,7 +26,7 @@ neuron & perceptron::operator[](int pos){
   size = _neurons.size();
   if(0 <= pos && pos < size)
     return _neurons[pos];
-  else throw "perceptron::operator[](int) : out of range index for neuron access.";
+  else throw std::string("perceptron::operator[](int) : out of range index for neuron access.");
 }
 
 std::ostream & operator<<(std::ostream & out, const perceptron & group){
@@ -74,14 +74,18 @@ void perceptron::resize(int newsize){
   if(newsize>0){
     _neurons.resize(newsize);
   }
-  else throw "perceptron::size() : invalid negative value for perceptron's size";
+  else throw std::string("perceptron::size() : invalid negative value for perceptron's size");
 }
 
-void perceptron::insert(neuron cell, int pos){
+void perceptron::add(neuron cell, int pos){
   int size = _neurons.size();
 
-  if(pos <= size)
+  if(pos == -1 || abs(pos) >size){
+    _neurons.push_back(cell);
+  }
+  else{
     _neurons.insert( _neurons.begin()+abs(pos), cell );
+  }
 }
 
 void perceptron::remove(int pos){
@@ -91,7 +95,7 @@ void perceptron::remove(int pos){
   if(0<=pos && pos<size){
     _neurons.erase(_neurons.begin()+pos);
   }
-  else throw "perceptron::remove(int) : out of range value for neuron's position";
+  else throw std::string("perceptron::remove(int) : out of range value for neuron's position");
 }
 
 void perceptron::rnd_weights(double min, double max){

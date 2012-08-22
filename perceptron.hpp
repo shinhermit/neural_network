@@ -106,7 +106,7 @@ public:
    *@param cell new neuron to add
    *@param pos where we want to add the neuron in the perceptron
    */
-  void insert(neuron, int);
+  void add(neuron, int=-1);
 
   /**
    *@brief removes a neuron from the perceptron

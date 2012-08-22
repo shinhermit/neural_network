@@ -13,7 +13,7 @@
 #include <iostream>
 #include <list>
 #include "perceptron.hpp"
-#include "synaptic.hpp"
+#include "synaptics.hpp"
 
 /**
  *@class network
@@ -26,7 +26,7 @@
  *@li the intput layer is the first layer
  *@li the output layer is the last layer
  *
- *connections between layers occur either:
+ *In feed forward networks, connections between layers occur either:
  *@li in the same layer
  *@li from "left" to "right", meaning low layer indices to higher indices
  *
@@ -39,12 +39,13 @@
  *Each layer has it's set of connections, which contains only incoming connections (what we need to evaluate it's ouput)
  *the layers and sets of connections are in 2 std::vectors
  *so the vectors have both the same number of elements
+ *
+ *Note for recurrent networks:
+ *@li at time t=0, the input layer gets it's inputs from outside the network via network::operator<<(vector) or network::receive(vector).
+ *@li at time t>0, the input layer (like other layers) gets it's inputs from inside the network via network::synaptic_injection(i)
 */
 class network
 {
-public:
-  typedef std::list<synaptic> synaptics;
-
 private:
   std::vector<perceptron> _layers;
   std::vector<synaptics> _connexions;
@@ -62,7 +63,7 @@ public:
    *@param neurons_per_layer number of neurons in each layer
    *@param inputs_per_neuron number of inputs of each neurons
    */
-  network(int=1, int=1, int=1);
+  network(int, int=1, int=1);
 
   /**
    *@brief copy constructor
@@ -78,6 +79,30 @@ public:
    *@brief operator =
    */
   network & operator=(const network&);
+
+  /**
+   *@brief operator >>
+   *sends the current state of the network as a string
+   */
+  network & operator>>(std::ostream&);
+
+  /**
+   *@brief operator <<
+   *equivalent to network::add_layer(perceptron)
+   */
+  network & operator<<(perceptron);
+
+  /**
+   *@brief operator <<
+   *equivalent to network::receive(double)
+   */
+  network & operator<<(double);
+
+  /**
+   *@brief operator <<
+   *equivalent to network::receive(std::vector<double>&)
+   */
+  network & operator<<(std::vector<double>&);
 
 
   /**
@@ -98,8 +123,9 @@ public:
   /**
    *@brief adds a layer into the network
    *@param layer layer (perceptron) to add
+   *@param pos if != -1, inserts at given position.
    */
-  void add_layer(perceptron);
+  void add_layer(perceptron, int=-1);
 
   /**
    *@brief removes a layer
@@ -138,6 +164,24 @@ public:
   bool registered_connection(synaptic);
 
   /**
+   *@brief tells if a given connection (synaptic object) is registered in the network
+   *@param src_unit outgoing unit of the connexion
+   *@param dst_unit incoming unit of the connexion
+   *@return boolean response
+   */
+  bool registered_connection(unit, unit);
+
+  /**
+   *@brief tells if a given connection (synaptic object) is registered in the network
+   *@param int outputing unit's layer
+   *@param int outputing unit's position
+   *@param int inputing unit's layer
+   *@param int inputing unit's position
+   *@return boolean response
+   */
+  bool registered_connection(int,int, int,int);
+
+  /**
    *@brief finds a neural connection in the network
    *the layer where the connection msut be found if given by the synapse ( synaptic::layer() )
    *finds the position a neural connection in the layer's connections set
@@ -147,12 +191,44 @@ public:
   int find_connection(synaptic);
 
   /**
+   *@brief finds a neural connection in the network
+   *the layer where the connection msut be found if given by the synapse ( synaptic::layer() )
+   *finds the position a neural connection in the layer's connections set
+   *@param src outputing unit
+   *@param dst intputing unit
+   *@return the position of the connection in the layer's list of connections if found, -1 if not
+   */  
+  int find_connection(unit, unit);
+
+  /**
+   *@brief finds a neural connection in the network
+   *the layer where the connection msut be found if given by the synapse ( synaptic::layer() )
+   *finds the position a neural connection in the layer's connections set
+   *@param int outputing unit's layer
+   *@param int outputing unit's position
+   *@param int inputing unit's layer
+   *@param int inputing unit's position
+   *@return the position of the connection in the layer's list of connections if found, -1 if not
+   */  
+  int find_connection(int,int, int,int);
+
+  /**
    *@brief tells if two unit are connected in the network
    *@param src outputing unit
    *@param dst intputing unit
    *@return boolean response
    */
   bool are_connected(unit,unit);
+
+  /**
+   *@brief tells if two unit are connected in the network
+   *@param int outputing unit's layer
+   *@param int outputing unit's position
+   *@param int inputing unit's layer
+   *@param int inputing unit's position
+   *@return boolean response
+   */
+  bool are_connected(int,int, int,int);
 
   /**
    *@brief creates a new connection between two units
@@ -185,40 +261,98 @@ public:
   void disconnect(unit,unit);
 
   /**
+   *@brief remove a connection from the network
+   *@param int outputing unit's layer
+   *@param int outputing unit's position
+   *@param int inputing unit's layer
+   *@param int inputing unit's position
+   */
+  void disconnect(int,int,int,int);
+
+  /**
+   *@brief removes every incoming connections to a unit
+   *this method removes all the connection where the given unit receives  an input from another unit's output
+   *@param cell the unit we want to remove all incoming connections
+   */
+  void disconnect_incoming(unit);
+
+  /**
+   *@brief removes every incoming connections to a unit
+   *this method removes all the connection where the given unit receives  an input from another unit's output
+   *@param layer outputing unit's layer
+   *@param pos outputing unit's position
+   */
+  void disconnect_incoming(int, int);
+
+  /**
+   *@brief removes every outgoing connections to a unit
+   *this method removes all the connection where another receives an input from the output of the given unit
+   *the second parameter allows to reduce the research space for feed forward networks
+   *@param cell the unit we want to remove all outgoing connections
+   *@param net_type feed forward only or backward connections allowed ?
+   */
+  void disconnect_outgoing(unit, neurals::type=neurals::FEED_FORWARD);
+
+  /**
+   *@brief removes every outgoing connections to a unit
+   *this method removes all the connection where another receives an input from the output of the given unit
+   *the second parameter allows to reduce the research space for feed forward networks
+   *@param layer layer of the unit we want to remove all outgoing connections
+   *@param pos position in the layer of the unit we want to remove all outgoing connections
+   *@param net_type feed forward only or backward connections allowed ?
+   */
+  void disconnect_outgoing(int,int, neurals::type=neurals::FEED_FORWARD);
+
+  /**
    *@brief remove all the connection in wich appears a unit
    *->either as outputing or inputing
+   *the second parameter allows to reduce the research space for feed forward networks
    *@param cell the unit we want to completly disconnect
+   *@param net_type feed forward only or backward connections allowed ?
    */
-  void disconnect_all(unit);
+  void disconnect_all(unit, neurals::type=neurals::FEED_FORWARD);
+
+  /**
+   *@brief remove all the connection in wich appears a unit
+   *->either as outputing or inputing
+   *the second parameter allows to reduce the research space for feed forward networks
+   *@param layer layer of the unit we want to completly disconnect
+   *@param pos position in the layer of the unit we want to completly disconnect
+   *@param net_type feed forward only or backward connections allowed ?
+   */
+  void disconnect_all(int,int, neurals::type=neurals::FEED_FORWARD);
 
   /**
    *@brief gets the inputs of a layer from it's neurons synaptic connections
-   *@param layer_index the layer's position in the network
+   *@param layer_index the layer's position in the network. Default: input layer.
    */
-  void synaptic_injection(int);
+  void synaptic_injection(int=0);
 
 
   /**
    *@brief successors of a unit
    *all the units that receive their inputs from the given unit
    *@param src_unit the unit of which we want the successors
+   *@param net_type the of the connections of the network: feed forward only, or feed backward allowed ?
    *@return std::vector<unit> of the successors of the given unit
    */
-  std::vector<unit> succ(unit);
+  std::vector<unit> succ(unit, neurals::type=neurals::FEED_FORWARD);
 
   /**
    *@brief successors of a unit
    *all the units that receive their inputs from the given unit
    *@param src_layer indice of tha layer where the given unit is
    *@param src_pos position of the given unit in it's layer
+   *@param net_type the of the connections of the network: feed forward only, or feed backward allowed ?
    *@return std::vector<unit> of the successors of the given unit
    */
-  std::vector<unit> succ(int,int);
+  std::vector<unit> succ(int,int, neurals::type=neurals::FEED_FORWARD);
 
   /**
    *@brief predecessors of a unit
    *all the units from which the given unit receives it's inputs
    *@param dst_unit the unit of which we want the predecessors
+   *@param net_type the of the connections of the network: feed forward only, or feed backward allowed ?
    *@return std::vector<unit> of the predecessors of the given unit
    */
   std::vector<unit> pred(unit);
@@ -228,6 +362,7 @@ public:
    *all the units from which the given unit receives it's inputs
    *@param dst_layer indice of tha layer where the given unit is
    *@param dst_pos position of the given unit in it's layer
+   *@param net_type the of the connections of the network: feed forward only, or feed backward allowed ?
    *@return std::vector<unit> predecessors of the given unit
    */
   std::vector<unit> pred(int, int);
@@ -246,9 +381,18 @@ public:
   void receive(std::vector<double>);
 
   /**
-   *@brief processes the evaluation by the network
+   *@brief processes a single evaluation of the network
+   *for feedback networks, use networl::evaluate(int num_of_steps)
+   *@param num_of_steps time information (number of steps)
    */
   void evaluate();
+
+  /**
+   *@brief evaluates throw time (steps)
+   *-->for recurrent networks
+   *@param num_of_steps number of times we process recurrent feeding
+   */
+  void evaluate(int);
 
   /**
    *@brief last results of the evaluation of the network
@@ -262,6 +406,12 @@ public:
    *@brief resets all the layers (perceptrons) of the network
    */
   void reset();
+
+  /**
+   *@brief prints the current state of the neuron
+   *useful for testing
+   */
+  void print();
 };
 
 #endif

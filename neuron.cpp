@@ -139,13 +139,13 @@ short neuron::binary_output()const{
 double neuron::getWeight(int i){
   if(0 <= i && i <= _size)
     return _weights[i];
-  else throw "neuron::output() : weight index extends unit size";
+  else throw std::string("neuron::output() : weight index extends unit size");
 }
 
 void neuron::setWeight(int i, double value){
   if(0 <= i && i <= _size)
     _weights[i] = value;
-  else throw "neuron::setWeight(int, double) : weight index extends unit size";
+  else throw std::string("neuron::setWeight(int, double) : weight index extends unit size");
 }
 
 void neuron::print(){

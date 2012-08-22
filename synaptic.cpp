@@ -4,6 +4,8 @@ synaptic::synaptic():_src( unit(0,0) ), _dst( unit(0,0) ){}
 
 synaptic::synaptic(unit source, unit destination):_src(source), _dst(destination){}
 
+synaptic::synaptic(int src_layer, int src_pos, int dst_layer, int dst_pos):_src( unit(src_layer,src_pos) ), _dst( unit(dst_layer,dst_pos) ){}
+
 synaptic::synaptic(const synaptic & source):_src(source._src), _dst(source._dst){
 }
 
@@ -29,3 +31,11 @@ int synaptic::layer()const{return _dst.layer();}
 unit & synaptic::source(){return _src;}
 
 unit & synaptic::dest(){return _dst;}
+
+void synaptic::print(){
+  std::cout<<"{";
+  _src.print();
+  std::cout<<"-->";
+  _dst.print();
+  std::cout<<"}";
+}
