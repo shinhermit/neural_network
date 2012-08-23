@@ -43,8 +43,8 @@ network & network::operator>>(std::ostream & out){
   return *this;
 }
 
-std::ostream & operator<<(std::ostream & out, perceptron & perceptor){
-  perceptor >> out;
+std::ostream & operator<<(std::ostream & out, network & net){
+  net >> out;
   return out;
 }
 

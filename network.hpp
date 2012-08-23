@@ -90,7 +90,7 @@ public:
    *@brief operator <<
    *just to keep std::cout << x style
    */
-  friend std::ostream & operator<<(std::ostream&, perceptron&);
+  friend std::ostream & operator<<(std::ostream&, network&);
 
   /**
    *@brief operator <<

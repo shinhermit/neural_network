@@ -90,6 +90,14 @@ int main(){
     net.disconnect_incoming(1,0);
     cout << net;
 
+    cout<<endl<<"disconnect_outgoing(1,1)"<<endl;
+    net.disconnect_outgoing(1,1);
+    cout << net;
+
+    cout<<endl<<"disconnect_all(1,2)"<<endl;
+    net.disconnect_all(1,2);
+    cout << net;
+
     cout<<endl<<"succ(0,0)"<<endl;
     adjacents = net.succ(0,0);
     cout << "[";
