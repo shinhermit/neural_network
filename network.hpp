@@ -88,6 +88,12 @@ public:
 
   /**
    *@brief operator <<
+   *just to keep std::cout << x style
+   */
+  friend std::ostream & operator<<(std::ostream&, perceptron&);
+
+  /**
+   *@brief operator <<
    *equivalent to network::add_layer(perceptron)
    */
   network & operator<<(perceptron);

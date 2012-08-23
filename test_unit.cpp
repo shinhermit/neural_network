@@ -38,7 +38,7 @@ int main(){
 
   cout<<endl<<"printing units ..."<<endl;
   cout<<"1: "; units[0].print(); cout<<endl;
-  cout<<"2: "; units[1].print(); cout<<endl;
+  cout<<"2: "<<units[1]<<endl;
   cout<<"3: "<<units[2]<<endl;
 
   cout<<endl<<"unsing layer() and pos() observers ..."<<endl;

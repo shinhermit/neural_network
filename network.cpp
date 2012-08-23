@@ -43,6 +43,12 @@ network & network::operator>>(std::ostream & out){
   return *this;
 }
 
+std::ostream & operator<<(std::ostream & out, perceptron & perceptor){
+  perceptor >> out;
+  return out;
+}
+
+
 network & network::operator<<(perceptron layer){
   _layers.push_back(layer);
   _connexions.push_back( synaptics() );
@@ -160,7 +166,7 @@ bool network::registered_connection(synaptic synapse){
     size = _connexions[layer].size();
     _connexions[layer].set_cursor(0);
     i = 0;
-    while(i<size){
+    while(i<size && !found){
       if(_connexions[layer]() == synapse)
 	found = true;
       else{
@@ -268,15 +274,16 @@ void network::disconnect(int src_layer, int src_pos, int dst_layer, int dst_pos)
 
 void network::disconnect_incoming(unit cell){
   int layer, i, size;
-  std::list<synaptic>::iterator it;
+  synaptic synapse;
 
   if( valid_unit(cell) ){
     layer = cell.layer();
     size = _connexions[layer].size();
     _connexions[layer].set_cursor(0);
     for(i=0; i<size; i++){
-      if( _connexions[layer]().dest() == cell ){
-	disconnect( _connexions[layer]() );
+      synapse = _connexions[layer]();
+      if( synapse.dest() == cell ){
+	disconnect(synapse);
       }
       _connexions[layer]++;
     }
@@ -365,7 +372,7 @@ void network::disconnect_all(int layer, int pos, neurals::type net_type){
 }
 
 void network::synaptic_injection(int layer){
-  int num_of_layers, index, i, size;
+  int num_of_layers, index, i, num_of_synapses;
   perceptron * dst_layer;
   perceptron * src_layer;
   neuron* dst_neuron;
@@ -375,12 +382,13 @@ void network::synaptic_injection(int layer){
   num_of_layers = _layers.size();
   if(0 <= layer && layer < num_of_layers){
     dst_layer = & _layers[layer];
-    size = _connexions[layer].size();
-    for(i=0; i<size; i++){
+    num_of_synapses = _connexions[layer].size();
+    _connexions[layer].set_cursor(0);
+    for(i=0; i<num_of_synapses; i++){
       synapse = _connexions[layer]();
 
       //incoming neuron
-      index = synapse.layer();
+      index = synapse.dest().pos();
       dst_neuron = & (*dst_layer)[index];
 
       //outgoing neuron
@@ -552,5 +560,5 @@ void network::print(){
     _layers[i].print();
     _connexions[i].print();
   }
-  std::cout<<"(((((((((("<<std::endl;
+  std::cout<<"))))))))))"<<std::endl;
 }

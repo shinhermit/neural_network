@@ -60,7 +60,7 @@ int main(){
   cout << perceptor;
 
   cout<<endl<<endl<<"Adding a neuron of 3 inputs..."<<endl;
-  perceptor.insert(neuron(3), 0);
+  perceptor.add(neuron(3));
   cout << perceptor;
 
   cout<<endl<<endl<<"Adding 2 neurons, 2 inputs and 4 inputs..."<<endl;
@@ -68,7 +68,7 @@ int main(){
   cout << perceptor;
 
   cout<<endl<<endl<<"Inserting a neuron of 1 input at pos 1..."<<endl;
-  perceptor.insert(neuron(1), 1);
+  perceptor.add(neuron(1), 1);
   cout << perceptor;
 
   cout<<endl<<endl<<"Receiving values from vector (1 1 0 1)..."<<endl;

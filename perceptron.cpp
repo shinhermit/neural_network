@@ -29,16 +29,21 @@ neuron & perceptron::operator[](int pos){
   else throw std::string("perceptron::operator[](int) : out of range index for neuron access.");
 }
 
-std::ostream & operator<<(std::ostream & out, const perceptron & group){
+perceptron & perceptron::operator>>(std::ostream & out){
   int i, size;
 
   out<<"[";
-  size = group._neurons.size();
+  size = _neurons.size();
   for(i=0; i<size; i++){
-    out<<group._neurons[i];
+    out<<_neurons[i];
   }
   out<<"]";
 
+  return *this;
+}
+
+std::ostream & operator<<(std::ostream & out, perceptron & perceptor){
+  perceptor >> out;
   return out;  
 }
 

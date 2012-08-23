@@ -65,9 +65,15 @@ public:
   neuron & operator[](int);
 
   /**
-   *@brief operator <<
+   *@brief operator >>
    */
-  friend std::ostream & operator<<(std::ostream&, const perceptron&);
+  perceptron & operator>>(std::ostream&);
+
+  /**
+   *@brief operator <<
+   *just to keep std::cout << x style
+   */
+  friend std::ostream & operator<<(std::ostream&, perceptron&);
 
   /**
    *@brief operator <<

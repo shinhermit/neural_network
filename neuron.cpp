@@ -22,17 +22,23 @@ neuron & neuron::operator=(const neuron & source){
   return *this;
 }
 
-std::ostream & operator<<(std::ostream & out, const neuron & cell){
+neuron & neuron::operator>>(std::ostream & out){
   int i;
 
-  out<<"("<<cell._size<< ", [";
+  out<<"("<<_size<< ", [";
 
-  for(i=0; i < cell._size; i++)
-    out<<cell._weights[i]<<"|";
-  if(i <= cell._size)
-    out<<cell._weights[i];
+  for(i=0; i < _size; i++)
+    out<<_weights[i]<<"|";
+  if(i <= _size)
+    out<<_weights[i];
 
-  out<<"], "<<cell._index<<", "<<cell._buffer<<", "<<cell._output<<")";
+  out<<"], "<<_index<<", "<<_buffer<<", "<<_output<<")";
+
+  return *this;
+}
+
+std::ostream & operator<<(std::ostream & out, neuron & cell){
+  cell >> out;
   return out;
 }
 

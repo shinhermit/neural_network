@@ -17,8 +17,13 @@ synaptic & synaptic::operator=(const synaptic & source){
   return *this;
 }
 
-std::ostream & operator<<(std::ostream & out, const synaptic & synapse){
-  out<<"{"<<synapse._src<<"-->"<<synapse._dst<<"}";
+synaptic & synaptic::operator>>(std::ostream & out){
+  out<<"{"<<_src<<"-->"<<_dst<<"}";
+  return *this;
+}
+
+std::ostream & operator<<(std::ostream & out, synaptic & synapse){
+  synapse >> out;
   return out;
 }
 

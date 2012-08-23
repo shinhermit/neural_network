@@ -12,9 +12,16 @@ unit & unit::operator=(const unit & source){
   return *this;
 }
 
-std::ostream & operator<<(std::ostream& out, const unit & cell){
+unit & unit::operator>>(std::ostream & out){
+  
+  out<<"("<<_layer<<", "<<_pos<<")";
+  
+  return *this;
+}
 
-  out<<"("<<cell._layer<<", "<<cell._pos<<")";
+std::ostream & operator<<(std::ostream& out, unit & cell){
+
+  cell >> out;
 
   return out;
 }

@@ -53,9 +53,15 @@ public:
   unit & operator=(const unit &);
 
   /**
-   *@brief operator <<
+   *@brief operator >>
    */
-friend std::ostream & operator<<(std::ostream&, const unit&);
+  unit & operator>>(std::ostream&);
+
+  /**
+   *@brief operator <<
+   *just to keep cout style
+   */
+  friend std::ostream & operator<<(std::ostream&, unit&);
 
   /**
    *@brief operator ==

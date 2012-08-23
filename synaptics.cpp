@@ -64,7 +64,8 @@ void synaptics::move_cursor(int offset){
 void synaptics::set_cursor(int pos){
   int i;
   _it = _inner_list.begin();
-  for(i=0; i<abs(pos) && _it!=_inner_list.end(); i++) _it++;
+  pos = abs(pos);
+  for(i=0; i<pos && _it!=_inner_list.end(); i++) _it++;
 }
 
 void synaptics::add(synaptic synapse, int pos){
@@ -79,6 +80,7 @@ void synaptics::add(synaptic synapse, int pos){
     if(0 <= pos && pos < size){
       set_cursor(pos);
       _inner_list.insert(_it, synapse);
+      set_cursor(0); //I don't want to deal with all the cases :p
     }
     else throw std::string("synaptics::add(synaptic,int) : given position is out of range.");
   }
@@ -92,6 +94,7 @@ void synaptics::remove(int pos){
   if(0 <= pos && pos < size){
     set_cursor(pos);
     _inner_list.erase(_it);
+    set_cursor(0);
   }
 }
 

@@ -63,9 +63,15 @@ public:
   synaptic & operator=(const synaptic&);
 
   /**
-   *@brief operator <<
+   *@brief operator >>
    */
-  friend std::ostream & operator<<(std::ostream&, const synaptic&);
+  synaptic & operator>>(std::ostream&);
+
+  /**
+   *@brief operator <<
+    *Just to keep std::cout << x style
+   */
+  friend std::ostream & operator<<(std::ostream&, synaptic&);
 
   /**
    *@brief operator ==
