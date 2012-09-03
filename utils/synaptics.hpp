@@ -2,7 +2,7 @@
 #define SYNAPTICS_HPP
 
 #include <iostream>
-#include <list>
+#include <vector>
 #include <cstdlib>
 #include "synaptic.hpp"
 
@@ -14,8 +14,7 @@
 class synaptics
 {
 private:
-  std::list<synaptic> _inner_list; /*!< aggregated std::list<synaptic>*/
-  std::list<synaptic>::iterator _it; /*!< to iterate elements*/
+  std::vector<synaptic> _synapses;
 
 public:
   /**
@@ -39,22 +38,10 @@ public:
   synaptics & operator=(const synaptics&);
 
   /**
-   *@brief operator ++
-   *iterates elements
-   */
-  void operator++(int);
-
-  /**
-   *@brief operator --
-   *iterates elements
-   */
-  void operator--(int);
-
-  /**
-   *@brief operator ()
+   *@brief operator []
    *accesses current element
    */
-  synaptic & operator()();
+  synaptic & operator[](int);
 
   /**
    *@brief operator >>
@@ -62,6 +49,12 @@ public:
    *sends the current state of the list to the output stream
    */
   synaptics & operator>>(std::ostream&);
+
+  /**
+   *@brief operator <<
+   *just to keep cout << style
+   */
+  friend std::ostream & operator<<(std::ostream&, synaptics&);
   
   /**
    *@brief operator <<
@@ -73,18 +66,6 @@ public:
    *@return number of elements
    */
   int size();
-
-  /**
-   *@brief moves the cursor of the given offset
-   *@param offset translation offset
-   */
-  void move_cursor(int);
-
-  /**
-   *@brief sets the the cursor at given position
-   *@param pos postion
-   */
-  void set_cursor(int);
 
   /**
    *adds an element at the given position

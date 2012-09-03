@@ -79,6 +79,36 @@ public:
    */
   friend bool operator==(const synaptic&, const synaptic&);
 
+  /**
+   *@brief operator !=
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator!=(const synaptic&, const synaptic&);
+
+  /**
+   *@brief operator <
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator<(const synaptic&, const synaptic&);
+
+  /**
+   *@brief operator >
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator>(const synaptic&, const synaptic&);
+
+  /**
+   *@brief operator <=
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator<=(const synaptic&, const synaptic&);
+
+  /**
+   *@brief operator >=
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator>=(const synaptic&, const synaptic&);
+
 
   /**
    *@brief accessor

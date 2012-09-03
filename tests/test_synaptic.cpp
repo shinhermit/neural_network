@@ -35,14 +35,14 @@ int main(){
   else
     cout<<"false"<<endl;
 
-  cout<<"synapse1 == synapse3 : ";
-  if(synapses[0] == synapses[2])
+  cout<<"synapse1 < synapse3 : ";
+  if(synapses[0] < synapses[2])
     cout<<"true"<<endl;
   else
     cout<<"false"<<endl;
 
-  cout<<"synapse2 == synapse3 : ";
-  if(synapses[1] == synapses[2])
+  cout<<"synapse2 <= synapse3 : ";
+  if(synapses[1] <= synapses[2])
     cout<<"true"<<endl;
   else
     cout<<"false"<<endl;

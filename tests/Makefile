@@ -1,0 +1,35 @@
+#VARIABLES
+src= .
+inc= -I. -I../utils -I../abstract -I../inc -I../heavy_net -I../learnings
+obj= ../obj
+exe= ..
+flags= -Wall -g
+cc= g++
+
+#CIBLES
+
+all: 
+
+test_unit:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_synaptic:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_synaptics:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_neuron:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_layer:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_network:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_example:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_learning:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out

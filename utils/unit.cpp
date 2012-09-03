@@ -30,6 +30,34 @@ bool operator==(const unit & cell1, const unit & cell2){
   return (cell1._layer == cell2._layer && cell1._pos == cell2._pos);
 }
 
+bool operator!=(const unit & cell1, const unit & cell2){
+  return !(cell1 == cell2);
+}
+
+bool operator<(const unit & cell1, const unit & cell2){
+  bool less;
+
+  less = false;
+  if(cell1._layer < cell2._layer)
+    less = true;
+  else if(cell1._layer == cell2._layer && cell1._pos < cell2._pos)
+    less = true;
+
+  return less;
+}
+
+bool operator>(const unit & cell1, const unit & cell2){
+  return !(cell1 < cell2 || cell1 == cell2);
+}
+
+bool operator<=(const unit & cell1, const unit & cell2){
+  return (cell1 < cell2 || cell1 == cell2);
+}
+
+bool operator>=(const unit & cell1, const unit & cell2){
+  return !(cell1 < cell2);
+}
+
 int unit::layer()const{return _layer;}
 
 int unit::pos()const{return _pos;}

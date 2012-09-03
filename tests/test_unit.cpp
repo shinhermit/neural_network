@@ -24,14 +24,14 @@ int main(){
   else
     cout<<"false"<<endl;
 
-  cout<<"unit1 == unit3 : ";
-  if(units[0] == units[2])
+  cout<<"unit1 < unit3 : ";
+  if(units[0] < units[2])
     cout<<"true"<<endl;
   else
     cout<<"false"<<endl;
 
-  cout<<"unit2 == unit3 : ";
-  if(units[1] == units[2])
+  cout<<"unit2 >= unit3 : ";
+  if(units[1] >= units[2])
     cout<<"true"<<endl;
   else
     cout<<"false"<<endl;

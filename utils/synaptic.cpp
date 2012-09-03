@@ -6,8 +6,7 @@ synaptic::synaptic(unit source, unit destination):_src(source), _dst(destination
 
 synaptic::synaptic(int src_layer, int src_pos, int dst_layer, int dst_pos):_src( unit(src_layer,src_pos) ), _dst( unit(dst_layer,dst_pos) ){}
 
-synaptic::synaptic(const synaptic & source):_src(source._src), _dst(source._dst){
-}
+synaptic::synaptic(const synaptic & source):_src(source._src), _dst(source._dst){}
 
 synaptic::~synaptic(){}
 
@@ -29,6 +28,34 @@ std::ostream & operator<<(std::ostream & out, synaptic & synapse){
 
 bool operator==(const synaptic & synapse1, const synaptic & synapse2){
   return (synapse1._src == synapse2._src && synapse1._dst == synapse2._dst);
+}
+
+bool operator!=(const synaptic & synapse1, const synaptic & synapse2){
+  return !(synapse1 == synapse2);
+}
+
+bool operator<(const synaptic & synapse1, const synaptic & synapse2){
+  bool less;
+
+  less = false;
+  if(synapse1._dst < synapse2._dst)
+    less = true;
+  else if(synapse1._dst == synapse2._dst && synapse1._src < synapse2._src)
+    less = true;
+
+  return less;
+}
+
+bool operator>(const synaptic & synapse1, const synaptic & synapse2){
+  return !(synapse1 < synapse2 || synapse1 == synapse2);
+}
+
+bool operator<=(const synaptic & synapse1, const synaptic & synapse2){
+  return (synapse1 < synapse2 || synapse1 == synapse2);
+}
+
+bool operator>=(const synaptic & synapse1, const synaptic & synapse2){
+  return !(synapse1 < synapse2);
 }
 
 int synaptic::layer()const{return _dst.layer();}

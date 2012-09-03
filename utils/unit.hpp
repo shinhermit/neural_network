@@ -69,6 +69,36 @@ public:
    */
   friend bool operator==(const unit&, const unit&);
 
+  /**
+   *@brief operator !=
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator!=(const unit&, const unit&);
+
+  /**
+   *@brief operator <
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator<(const unit&, const unit&);
+
+  /**
+   *@brief operator >
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator>(const unit&, const unit&);
+
+  /**
+   *@brief operator <=
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator<=(const unit&, const unit&);
+
+  /**
+   *@brief operator >=
+   *@return true when the layers indices and neurons postions recpectivly match
+   */
+  friend bool operator>=(const unit&, const unit&);
+
 
   /**
    *@brief accessor
