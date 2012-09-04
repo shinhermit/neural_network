@@ -2,7 +2,7 @@
  *@file heavy_neuron.hpp
  *@brief base element of heavy neural networks.
  *@author Josuah ARON
- *@version 0.1
+ *@version 0.2
  *@date 19 August 2012
  *
  */

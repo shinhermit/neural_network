@@ -1,6 +1,6 @@
 #VARIABLES
 src= .
-inc= -I. -I../utils -I../abstract -I../inc -I../heavy_net -I../learnings
+inc= -I. -I../utils -I../abstract -I../inc -I../heavy_net -I../learn
 obj= ../obj
 exe= ..
 flags= -Wall -g
@@ -28,7 +28,10 @@ test_layer:
 test_network:
 	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
 
-test_example:
+test_pattern:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_pattern_set:
 	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
 
 test_learning:

@@ -1,7 +1,7 @@
 /**
  *@file heavy_network.hpp
  *@brief generic neural heavy_network
- *@version 0.1
+ *@version 0.2
  *@author Josuah Aron
  *@date 10 August 2012
  *
@@ -50,6 +50,10 @@ class heavy_network : public network
 private:
   std::vector<layer*> _layers; /*!< neurons layers */
   std::map<int,synaptics> _connexions; /*!< layer |--> set of connections*/
+
+  void _deep_layers_copy(const heavy_network&);
+
+  void _deep_layers_clear();
 
 public:
   /**
@@ -271,7 +275,7 @@ public:
    *@param layer indice of tha layer where the given unit is
    *@param pos position of the given unit in it's layer
    *@param net_type the of the connections of the heavy_network: feed forward only, or feed backward allowed ?
-   *@return std::vector<unit> of the successors of the given unit
+   *@return sorted std::vector<unit> of the successors of the given unit
    */
   std::vector<unit> succ(int,int);
 
@@ -281,7 +285,7 @@ public:
    *@param dst_layer indice of tha layer where the given unit is
    *@param dst_pos position of the given unit in it's layer
    *@param net_type the of the connections of the heavy_network: feed forward only, or feed backward allowed ?
-   *@return std::vector<unit> predecessors of the given unit
+   *@return sorted std::vector<unit> predecessors of the given unit
    */
   std::vector<unit> pred(int, int);
 

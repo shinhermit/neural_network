@@ -1,5 +1,25 @@
 #include "heavy_layer.hpp"
 
+void heavy_layer::_deep_copy(const heavy_layer & source){
+  int i, size;
+
+  size = source.size();
+  for(i=0; i<size; i++){
+    _neurons.push_back( new heavy_neuron() );
+    *_neurons[i] = * source._neurons[i];
+  }
+}
+
+void heavy_layer::_deep_clear(){
+  int i;
+
+  for(i=0; i<(int)_neurons.size(); i++){
+    delete _neurons[i];
+    _neurons[i] = NULL;
+  }
+  _neurons.clear();
+}
+
 heavy_layer::heavy_layer(){}
 
 heavy_layer::heavy_layer(int size, int neuron_size){
@@ -11,52 +31,30 @@ heavy_layer::heavy_layer(int size, int neuron_size){
 }
 
 heavy_layer::heavy_layer(const heavy_layer & source){
-  int i;
-  neuron * cell;
-
-  for(i=0; i<(int)source.size(); i++){
-    cell = new heavy_neuron();
-    *cell = * source._neurons[i];
-    _neurons.push_back(cell);
-  }
-
+  _deep_copy(source);
 }
 
 heavy_layer::~heavy_layer(){
-  int i;
-
-  for(i=0; i<(int)_neurons.size(); i++){
-    delete _neurons[i];
-    _neurons[i] = NULL;
-  }
-  _neurons.clear();
+  _deep_clear();
 }
 
 heavy_layer & heavy_layer::operator=(const heavy_layer & source){
-  int i;
 
-  // this method desallocates when size decreases
-  // in stead of _neurons.resize()
-  resize( source.size() );
-
-  for(i=0; i<(int)_neurons.size(); i++){
-    _neurons[i] = new heavy_neuron();
-    *_neurons[i] = * source._neurons[i];
-  }
+  _deep_clear();
+  _deep_copy(source);
 
   return *this;
 }
 
 heavy_layer & heavy_layer::operator=(layer & source){
-  int i;
+  int i, size;
 
-  // this method desallocates when size decreases
-  // in stead of _neurons.resize()
-  resize( source.size() );
+  _deep_clear();
 
-  for(i=0; i<(int)_neurons.size(); i++){
-    _neurons[i] = new heavy_neuron();
-    _neurons[i]->operator=(*source[i]);
+  size = source.size();
+  for(i=0; i<size; i++){
+    _neurons.push_back( new heavy_neuron() );
+    *_neurons[i] = *source[i];
   }
 
   return *this;

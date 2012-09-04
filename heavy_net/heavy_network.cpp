@@ -1,5 +1,26 @@
 #include "heavy_network.hpp"
 
+void heavy_network::_deep_layers_copy(const heavy_network & source){
+  int i, size;
+
+  size = source._layers.size();
+  for(i=0; i<size; i++){
+    _layers.push_back( new heavy_layer() );
+    *_layers[i] = *source._layers[i];
+  }
+}
+
+void heavy_network::_deep_layers_clear(){
+  int i, size;
+
+  size = _layers.size();
+  for(i=0; i < size; i++){
+    delete _layers[i];
+  }
+  _layers.clear();
+}
+
+
 heavy_network::heavy_network(){}
 
 heavy_network::heavy_network(int layers_num, int neurons_per_layer, int inputs_per_neuron){
@@ -12,43 +33,18 @@ heavy_network::heavy_network(int layers_num, int neurons_per_layer, int inputs_p
   }
 }
 
-heavy_network::heavy_network(const heavy_network & source):_layers( std::vector<layer*>(source._layers.size()) ), _connexions(source._connexions){
-  int i, size;
-
-  size = _layers.size();
-  for(i=0; i<size; i++){
-    _layers[i] = new heavy_layer();
-    *_layers[i] = *source._layers[i];
-  }
+heavy_network::heavy_network(const heavy_network & source):_connexions(source._connexions){
+  _deep_layers_copy(source);
 }
 
 heavy_network::~heavy_network(){
-  int i, size;
-
-  size = _layers.size();
-  for(i=0; i < size; i++){
-    delete _layers[i];
-  }
-  _layers.clear();
+  _deep_layers_clear();  
   _connexions.clear();
 }
 
 heavy_network & heavy_network::operator=(const heavy_network & source){
-  int i, size, src_size;
-
-  size = _layers.size();
-  src_size = source._layers.size();
-
-  //if elements will be removed
-  for(i=size-1; i >= src_size; i++){
-    delete _layers[i];
-  }
-
-  _layers.resize(src_size);
-  for(i=0; i < size; i++){
-    _layers[i] = new heavy_layer();
-    *_layers[i] = *source._layers[i];
-  }
+  _deep_layers_clear();
+  _deep_layers_copy(source);
 
   _connexions = source._connexions;
 
@@ -56,20 +52,14 @@ heavy_network & heavy_network::operator=(const heavy_network & source){
 }
 
 heavy_network & heavy_network::operator=(network & source){
-  int i, size, src_size;
+  int i, size;
 
-  size = _layers.size();
-  src_size = source.size();
+  _deep_layers_clear();
 
-  //if elements will be removed
-  for(i=size-1; i >= src_size; i++){
-    delete _layers[i];
-  }
-
-  _layers.resize(src_size);
-  for(i=0; i < size; i++){
-    _layers[i] = new heavy_layer();
-    _layers[i]->operator=(*source[i]);
+  size = source.size();
+  for(i=0; i<size; i++){
+    _layers.push_back( new heavy_layer() );
+    *_layers[i] = *source[i];
   }
 
   _connexions = source.getConnections();

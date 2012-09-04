@@ -2,7 +2,7 @@
  *@file heavy_layer.hpp
  *@brief defining the heavy_layer.
  *@author Josuah ARON
- *@version 0.1
+ *@version 0.2
  *@date 19 August 2012
  *
  */
@@ -27,6 +27,10 @@ class heavy_layer : public layer
 {
 private:
   std::vector<neuron*> _neurons; /*!< heavy_neurons of the heavy_layer*/
+
+  void _deep_copy(const heavy_layer&);
+
+  void _deep_clear();
 
 public:
   /**

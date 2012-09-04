@@ -75,15 +75,24 @@ clean_lights_temp:
 ##### learning algorithms
 
 pattern:
-	cd learning; make $@
+	cd learn; make $@
+
+pattern_set:
+	cd learn; make $@
+
+h_pattern:
+	cd learn; make $@
+
+h_pattern_set:
+	cd learn; make $@
 
 learning:
-	cd learning; make $@
+	cd learn; make $@
 
-trainings: pattern learning
+trainings: pattern pattern_set h_pattern h_pattern_set learn
 
 clean_trainings_temp:
-	rm learning/*~
+	rm learn/*~
 
 #### tests
 
@@ -106,7 +115,10 @@ test_layer: neuron layer heavy_neuron heavy_layer
 test_network: abstracts utils heavies
 	cd tests; make $@
 
-test_pattern: pattern
+test_pattern: pattern h_pattern
+	cd tests; make $@
+
+test_pattern_set: pattern pattern_set h_pattern h_pattern_set
 	cd tests; make $@
 
 test_learning: abstracts utils heavies trainings
