@@ -28,6 +28,7 @@ namespace neurals
 
   typedef enum {FEED_FORWARD, BACKWARD_ALLOWED} type;
   typedef enum{SEEDED, UNSEEDED}rnd_state;
+
 };
 
 #endif

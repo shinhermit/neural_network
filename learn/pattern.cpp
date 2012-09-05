@@ -18,8 +18,8 @@ pattern & pattern::operator>>(std::ostream & out){
   return *this;
 }
 
-std::ostream & operator<<(std::ostream & out, pattern * example){
-  *example >> out;
+std::ostream & operator<<(std::ostream & out, pattern & example){
+  example >> out;
   return out;
 }
 
@@ -48,28 +48,43 @@ pattern & pattern::receive_input(double value){
   return *this;
 }
 
-pattern & pattern::receive_ouput(float value){
+pattern & pattern::receive_output(float value){
   std::cout<<"calling abstract method pattern::receive_ouput(float)"<<std::endl;
   return *this;
 }
 
-pattern & pattern::receive_input(std::vector<double> data){
+pattern & pattern::receive_inputs(std::vector<double> data){
   std::cout<<"calling abstract method pattern::receive_input(std::vector<double>&)"<<std::endl;
   return *this;
 }
 
-pattern & pattern::receive_ouput(std::vector<float> data){
+pattern & pattern::receive_outputs(std::vector<float> data){
   std::cout<<"calling abstract method pattern::receive_ouput(std::vector<double>&)"<<std::endl;
   return *this;
 }
 
-pattern & pattern::receive_input(std::istream & in){
+pattern & pattern::receive_inputs(std::istream & in){
   std::cout<<"calling abstract method pattern::receive_input(std::istream&)"<<std::endl;
   return *this;
 }
 
-pattern & pattern::receive_ouput(std::istream & in){
+pattern & pattern::receive_outputs(std::istream & in){
   std::cout<<"calling abstract method pattern::receive_ouput(std::istream&)"<<std::endl;
+  return *this;
+}
+
+pattern & pattern::clear_inputs(){
+  std::cout<<"calling abstract method pattern::clear_inputs()"<<std::endl;
+  return *this;
+}
+
+pattern & pattern::clear_outputs(){
+  std::cout<<"calling abstract method pattern::clear_outputs()"<<std::endl;
+  return *this;
+}
+
+pattern & pattern::clear(){
+  std::cout<<"calling abstract method pattern::clear()"<<std::endl;
   return *this;
 }
 

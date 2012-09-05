@@ -2,42 +2,41 @@
 
 namespace learning
 {
-  float squared_error(neuron * cell, pattern_set * examples, int expected_pos){
+  float squared_error(neuron & cell, pattern_set & examples, int expected_pos){
     int N, k;
     double expected;
     float error, acc;
 
-    N = examples->size(); //number of examples
+    N = examples.size(); //number of examples
     acc = 0;
     for(k=0; k<N; k++){
       
-      //each example must have a component that corresponds to the expected output
-      if( expected_pos < 0 || expected_pos >= (*examples)[k]->outputs_size() ){
+      if( expected_pos < 0 || expected_pos >= examples[k]->outputs_size() ){
 	  throw std::string("learning::squared_error(): position of expected ouput is out of range");
 	}
 
-      expected = (*examples)[k]->outputs_size() > 0 ? (*examples)[k]->output(expected_pos) : 0;
+      expected = examples[k]->outputs_size() > 0 ? examples[k]->output(expected_pos) : 0;
 
-      *cell << (*examples)[k]->inputs();
-      cell->evaluate();
+      cell << examples[k]->inputs();
+      cell.evaluate();
 
-      error = expected - cell->output();
+      error = expected - cell.output();
       acc += error*error;
     }
     return acc / N;
   }
 
-  float squared_error(layer * perceptron, pattern_set * examples){
+  float squared_error(layer & perceptron, pattern_set & examples){
     int i, num_of_neurons;
     float sum, error;
 
-    num_of_neurons = perceptron->size();
+    num_of_neurons = perceptron.size();
     error = 0;
     if(num_of_neurons > 0){
       sum = 0;
       for(i=0; i<num_of_neurons; i++){
 	try{
-	  sum += squared_error( (*perceptron)[i], examples, i );
+	  sum += squared_error(*perceptron[i], examples, i );
 	}
 	catch(std::string){
 	  throw std::string("learning::squared_error(perceptron&,std::vector<example>&): the perceptron has more neurons than the one of the examples has expected outputs.");
@@ -49,22 +48,22 @@ namespace learning
     return error;
   }
 
-  float squared_error(network * net, pattern_set * examples){
+  float squared_error(network & net, pattern_set & examples){
     int N, k, i, last, num_of_layers, res_size, exp_size;
     double expected, evaluated;
     float error_k, acc_k, squared_error_k, acc;
 
-    N = examples->size();
+    N = examples.size();
     acc = 0;
     for(k=0; k<N; k++){
-      *net << (*examples)[k]->inputs();
-      net->evaluate();
+      net << examples[k]->inputs();
+      net.evaluate();
 
-      num_of_layers = net->size();
+      num_of_layers = net.size();
       last = num_of_layers - 1;
       if(num_of_layers > 0){
-	res_size = (*net)[last]->size();
-	exp_size = (*examples)[k]->outputs_size();
+	res_size = net[last]->size();
+	exp_size = examples[k]->outputs_size();
 
 	if(res_size != exp_size){
 	  throw std::string("exception! learning::squared_error(network*,pattern_set*): size of network output vector is different from size of expected outputs vector of one example");
@@ -72,8 +71,8 @@ namespace learning
 
 	acc_k=0;
 	for(i=0; i<res_size; i++){
-	  expected = (*examples)[k]->output(i);
-	  evaluated = (*net)(last,i)->output();
+	  expected = examples[k]->output(i);
+	  evaluated = net(last,i)->output();
 	  error_k = expected - evaluated;
 	  acc_k += error_k * error_k;
 	}
@@ -88,18 +87,18 @@ namespace learning
     return acc / N;
   }
 
-  void gradient_descent(double alpha, neuron * cell, pattern_set * examples, int expected_pos){
+  void gradient_descent(double alpha, neuron & cell, pattern_set & examples, int expected_pos){
     std::vector<double> delta;
     int i, k, num_of_inputs, num_of_examples, num_of_expected;
     float expected;
     double x_i;
 
-    num_of_inputs = cell->size();
-    num_of_examples = examples->size();
+    num_of_inputs = cell.size();
+    num_of_examples = examples.size();
     delta = std::vector<double>(num_of_inputs);
     for(k=0; k<num_of_examples; k++){
 
-      num_of_expected = (*examples)[k]->outputs_size();
+      num_of_expected = examples[k]->outputs_size();
       if( expected_pos < 0 || expected_pos >= num_of_expected ){
 	throw std::string("learning::gradient_descent(): position of expected ouput is out of range");
 	return;
@@ -112,29 +111,29 @@ namespace learning
 
       for(i=0; i<num_of_inputs; i++){
 
-	expected = (*examples)[k]->output(expected_pos);
+	expected = examples[k]->output(expected_pos);
 
-	*cell << (*examples)[k]->inputs();
-	cell->evaluate();
+	cell << examples[k]->inputs();
+	cell.evaluate();
 
-	x_i = (*examples)[k]->input(i);
+	x_i = examples[k]->input(i);
 
-	delta[i] += alpha * ( expected - cell->output() ) * x_i;
+	delta[i] += alpha * ( expected - cell.output() ) * x_i;
       }
     }
 
     for(i=0; i<num_of_inputs; i++){
-      cell->setWeight( i, cell->getWeight(i) + delta[i] );
+      cell.setWeight( i, cell.getWeight(i) + delta[i] );
     }
   }
 
-  void gradient_descent(double alpha, layer * perceptron, pattern_set * examples){
+  void gradient_descent(double alpha, layer & perceptron, pattern_set & examples){
     int i, num_of_neurons;
 
-    num_of_neurons = perceptron->size();
+    num_of_neurons = perceptron.size();
     for(i=0; i<num_of_neurons; i++){
       try{
-	gradient_descent(alpha, (*perceptron)[i], examples, i);
+	gradient_descent(alpha, *perceptron[i], examples, i);
       }
       catch(std::string&){
 	throw std::string("learning::gradient_descent(double,perceptron&,std::vector<example>&): the perceptron has more neurons than the one of the examples has expected outputs.");
@@ -142,16 +141,16 @@ namespace learning
     }
   }
 
-  void delta_rule(double alpha, neuron * cell, pattern_set * examples, int expected_pos){
+  void delta_rule(double alpha, neuron & cell, pattern_set & examples, int expected_pos){
     int i, k, num_of_examples, num_of_inputs, num_of_expected;
     float x_i;
     double expected, delta;
 
-    num_of_examples = examples->size();
-    num_of_inputs = cell->size();
+    num_of_examples = examples.size();
+    num_of_inputs = cell.size();
     for(k=0; k<num_of_examples; k++){
 
-      num_of_expected = (*examples)[k]->outputs_size();
+      num_of_expected = examples[k]->outputs_size();
       if(num_of_expected < 1){
 	throw std::string("learning::delta_rule(double,neuron,std::vector<example>): encountered example with no expected output.");
 	return;
@@ -164,26 +163,26 @@ namespace learning
 	  return;
 	}
 
-	expected = (*examples)[k]->output(expected_pos);
+	expected = examples[k]->output(expected_pos);
 
-	*cell << (*examples)[k]->inputs();
-	cell->evaluate();
+	cell << examples[k]->inputs();
+	cell.evaluate();
 
-	x_i = (*examples)[k]->input(i);
+	x_i = examples[k]->input(i);
 
-	delta = alpha * ( expected - cell->output() ) * x_i;
-	cell->setWeight(i, cell->getWeight(i) + delta);
+	delta = alpha * ( expected - cell.output() ) * x_i;
+	cell.setWeight(i, cell.getWeight(i) + delta);
       }
     }
   }
 
-  void delta_rule(double alpha, layer * perceptron, pattern_set * examples){
+  void delta_rule(double alpha, layer & perceptron, pattern_set & examples){
     int i, num_of_neurons;
 
-    num_of_neurons = perceptron->size();
+    num_of_neurons = perceptron.size();
     for(i=0; i<num_of_neurons; i++){
       try{
-	delta_rule(alpha, (*perceptron)[i], examples, i);
+	delta_rule(alpha, *perceptron[i], examples, i);
       }
       catch(std::string){
 	throw std::string("learning::delta_rule(double,perceptron&,std::vecto<example>&): the perceptron has more neurons than the one of the examples has expected outputs");
@@ -223,31 +222,31 @@ namespace learning
     return find_in_pred(pred, unit(layer, pos));
   }
 
-  void back_propagation(double alpha, network * net, pattern_set * examples){
+  void backpropagation(double alpha, network & net, pattern_set & examples){
     int k, j, i, p, x, y, w_i, last, num_of_examples, num_of_layers, num_of_neurons, num_of_outputs, num_of_inputs, num_of_expected, num_of_weights;
     std::vector< std::vector<double> > delta;
     float calculated, expected, x_i;
     double forward_influence, w;
     std::vector<unit> succ, pred;
 
-    num_of_layers = net->size();
-    num_of_examples = examples->size();
+    num_of_layers = net.size();
+    num_of_examples = examples.size();
 
     delta = std::vector< std::vector<double> >(num_of_layers);
 
     for(k=0; k<num_of_examples; k++){
       //evaluating the ouput of the network
-      *net << (*examples)[k]->inputs();
-      net->evaluate();
+      net << examples[k]->inputs();
+      net.evaluate();
 
       //the output layer
-      if(net->size() == 0){
+      if(net.size() == 0){
 	throw std::string("exception! learning::back_propagation(double,network*,pattern_set*) : the network has no layer.");
       }
 
-      last = net->size()-1;
-      num_of_outputs = (*net)[last]->size();
-      num_of_expected = (*examples)[k]->outputs_size();
+      last = net.size()-1;
+      num_of_outputs = net[last]->size();
+      num_of_expected = examples[k]->outputs_size();
 
       if(num_of_outputs != num_of_expected){
 	throw std::string("exception! learning::back_propagation(double,network*,pattern_set*) : network outputs vector size does not match expected outputs vector size of one example");
@@ -255,37 +254,37 @@ namespace learning
 
       delta[last] = std::vector<double>(num_of_outputs);
       for(i=0; i<num_of_outputs; i++){
-	calculated = (*net)(last,i)->output();
+	calculated = net(last,i)->output();
 
-	expected = (*examples)[k]->output(i);
+	expected = examples[k]->output(i);
 
 	delta[last][i] = calculated * (1 - calculated) * (expected - calculated);
       }
 
       //the other layers
-      for(j=last-1; j>=0; j++){
-	num_of_neurons = (*net)[j]->size();
+      for(j=last-1; j>=0; j--){
+	num_of_neurons = net[j]->size();
 	delta[j] = std::vector<double>(num_of_neurons);
 	for(i=0; i<num_of_neurons; i++){
-	  calculated = (*net)(j,i)->output();
+	  calculated = net(j,i)->output();
 
 	  //influence: how the cell impacts (the error of) is successors
 	  forward_influence = 0;
-	  succ = net->succ(j,i);
+	  succ = net.succ(j,i);
 	  for(p=0; p<(int)succ.size(); p++){
 	    //successor's coordinates to find his delta
 	    x = succ[p].layer();
 	    y = succ[p].pos();
 
 	    //finding the weight of the connection cell-->current successor
-	    pred = net->pred(x,y);
+	    pred = net.pred(x,y);
 	    w_i = find_in_pred( pred, unit(j,i) );
 
 	    if(w_i == -1){
 	      throw std::string("exception! learning::back_propagation(double,network*,pattern_set*) found possible programming paradox: a unit does not appear in the predecessors list of one of his successors.");
 	    }
 
-	    forward_influence += delta[x][y] * (*net)(x,y)->getWeight(w_i);
+	    forward_influence += delta[x][y] * net(x,y)->getWeight(w_i);
 	  }
 
 	  delta[j][i] = calculated * (1 - calculated) * forward_influence;
@@ -294,39 +293,39 @@ namespace learning
       
       ///////  weights correction /////////
       //input layer
-      num_of_neurons = (*net)[0]->size();
+      num_of_neurons = net[0]->size();
       for(i=0; i<num_of_neurons; i++){
-	num_of_weights = (*net)(0,i)->size();
-	num_of_inputs = (*examples)[k]->inputs_size();
+	num_of_weights = net(0,i)->size();
+	num_of_inputs = examples[k]->inputs_size();
 
 	if(num_of_weights != num_of_inputs){
 	  throw std::string("exception! learning::back_propagation(double,network*,pattern_set*): size of an input neuron is greater than size of inputs vectro of an example.");
 	}
 
 	for(p=0; p<num_of_weights; p++){
-	  w = (*net)(0,i)->getWeight(p) + alpha * delta[0][i] * (*examples)[k]->input(p);
-	  (*net)(0,i)->setWeight(p, w);
+	  w = net(0,i)->getWeight(p) + alpha * delta[0][i] * examples[k]->input(p);
+	  net(0,i)->setWeight(p, w);
 	}
       }
 
       //other layers
       for(j=1; j<num_of_layers; j++){
-	num_of_neurons = (*net)[j]->size();
+	num_of_neurons = net[j]->size();
 	for(i=0; i<num_of_neurons; i++){
-	  num_of_weights = (*net)(j,i)->size();
+	  num_of_weights = net(j,i)->size();
 	  for(p=0; p<num_of_weights; p++){
 	    //finding the neuron that injects in weight p
-	    pred = net->pred(j,i);
+	    pred = net.pred(j,i);
 	    if( pred.size() > 0 ){
 	      x = pred[p].layer();
 	      y = pred[p].pos();
-	      x_i = (*net)(x,y)->output();
+	      x_i = net(x,y)->output();
 	    }
 	    else x_i = 0;
  
 	    //correcting weight
-	    w = (*net)(j,i)->getWeight(p) + alpha * delta[j][i] * x_i;
-	    (*net)(j,i)->setWeight(p, w);
+	    w = net(j,i)->getWeight(p) + alpha * delta[j][i] * x_i;
+	    net(j,i)->setWeight(p, w);
 	  }
 	}
       }
@@ -334,7 +333,7 @@ namespace learning
     }//end for examples
   }
 
-  int backpropagation_until(double alpha, network * net, pattern_set * examples, float error_limit, int max_steps){
+  int backpropagation_until(double alpha, network & net, pattern_set & examples, float error_limit, int max_steps){
     int steps;
     float error;
 

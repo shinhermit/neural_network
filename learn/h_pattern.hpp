@@ -9,13 +9,14 @@
 #ifndef H_PATTERN_HPP
 #define H_PATTERN_HPP
 
+#include <sstream>
 #include "pattern.hpp"
 
 /**
  *@class h_pattern
  *@brief heavy h_pattern. designed for learning algorithms
  *make the manipulation of learning examples easier
- *represents a couple (input data, expected ouputs)
+ *represents a couple (input data, expected outputs)
  *
  */
 class h_pattern : public pattern
@@ -90,31 +91,48 @@ public:
    *@brief receives (stores) a value as an expected output
    *@param value the expected result component to store
    */
-  h_pattern & receive_ouput(float);
+  h_pattern & receive_output(float);
 
   /**
    *@brief receives (stores) multiples values as inputs
    *@param data vector of values to store
    */
-  h_pattern & receive_input(std::vector<double>);
+  h_pattern & receive_inputs(std::vector<double>);
 
   /**
    *@brief receives (stores) multiple values as expected outputs
    *@param data the expected result components to store
    */
-  h_pattern & receive_ouput(std::vector<float>);
+  h_pattern & receive_outputs(std::vector<float>);
 
   /**
    *@brief receives (stores) inputs values from a stream
+   *reads line by line
    *@param in stream where we get the values
    */
-  h_pattern & receive_input(std::istream&);
+  h_pattern & receive_inputs(std::istream&);
 
   /**
    *@brief receives (stores) outputs values from a stream
+   *reads line by line
    *@param in stream where we get the values
    */
-  h_pattern & receive_ouput(std::istream&);
+  h_pattern & receive_outputs(std::istream&);
+
+  /**
+   *@brief clear all  (stored) inputs values
+   */
+  h_pattern & clear_inputs();
+
+  /**
+   *@brief clear all  (stored) outputs values
+   */
+  h_pattern & clear_outputs();
+
+  /**
+   *@brief clear all (stored) inputs and outputs values
+   */
+  h_pattern & clear();
 
   /**
    *@brief accesses the i-th input

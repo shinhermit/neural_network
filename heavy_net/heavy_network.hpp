@@ -330,6 +330,16 @@ public:
   void reset();
 
   /**
+   *@brief removes all connections in the network
+   */
+  void clear_connections();
+
+  /**
+   *@brief clears all the content of the network
+   */
+  void clear();
+
+  /**
    *@brief prints the current state of the neuron
    *useful for testing
    */

@@ -16,7 +16,7 @@ namespace learning
    *@param expected_pos pos of the expected ouput we are considering. Default 0. Do not fix yourself, let the default value
    *@return the mean squared error of the neuron for the expected_pos example
    */
-  float squared_error(neuron*, pattern_set*, int=0);
+  float squared_error(neuron&, pattern_set&, int=0);
 
   /**
    *@brief evaluates the average squared error of a perceptron
@@ -24,7 +24,7 @@ namespace learning
    *@param model a couple of vectors (inputs, expected outputs)
    *@return the mean squared error of the neuron for the expected_pos example
    */
-  float squared_error(layer*, pattern_set*);
+  float squared_error(layer&, pattern_set&);
 
   /**
    *@brief evaluates the average squared error of a network, ie of the output layer
@@ -32,7 +32,7 @@ namespace learning
    *@param model a couple of vectors (inputs, expected outputs)
    *@return the mean squared error of the neuron for the expected_pos example
    */
-  float squared_error(network*, pattern_set*);
+  float squared_error(network&, pattern_set&);
 
   /**
    *@brief single neuron learning algorithm
@@ -42,7 +42,7 @@ namespace learning
    *@param examples vector of example, which is a couple (vector of inputs, vector of expected outpus)
    *@param expected_pos pos of the expected ouput we are considering. Default 0. Do not fix yourself, let the default value
    */
-  void gradient_descent(double, neuron*, pattern_set*, int);
+  void gradient_descent(double, neuron&, pattern_set&, int);
 
   /**
    *@brief perceptron learning algorithm
@@ -51,7 +51,7 @@ namespace learning
    *@param perceptor the student perceptron
    *@param examples vector of example, which is a couple (vector of inputs, vector of expected outpus)
    */
-  void gradient_descent(double, layer*, pattern_set*);
+  void gradient_descent(double, layer&, pattern_set&);
 
   /**
    *@brief single neuron learning algorithm
@@ -61,7 +61,7 @@ namespace learning
    *@param examples vector of example, which is a couple (vector of inputs, vector of expected outpus)
    *@param expected_pos pos of the expected ouput we are considering. Default 0. Do not fix yourself, let the default value
    */
-  void delta_rule(double, neuron*, pattern_set*, int);
+  void delta_rule(double, neuron&, pattern_set&, int);
 
   /**
    *@brief perceptron learning algorithm
@@ -70,7 +70,7 @@ namespace learning
    *@param perceptor the student perceptron
    *@param examples vector of example, which is a couple (vector of inputs, vector of expected outpus)
    */
-  void delta_rule(double, layer*, pattern_set*);
+  void delta_rule(double, layer&, pattern_set&);
 
   /**
    *@brief finds the weight index of a connection (backward search)
@@ -102,7 +102,7 @@ namespace learning
    *@param net the student network
    *@param examples vector of example, which is a couple (vector of inputs, vector of expected outpus)
    */
-  void backpropagation(double, network*, pattern_set*);
+  void backpropagation(double, network&, pattern_set&);
 
   /**
    *@brief applies backpropagation algorithm until the squared error falls below a given limit for each example
@@ -115,7 +115,7 @@ namespace learning
    *@param max_steps max number of times we apply the backpropagation algorithm. Stops the algorithm evenif error_limit has not been reached. Default 20.
    *@return the number of steps (number of times the backpropagation algorithm was runned).
    */
-   int backpropagation_until(double, network*, pattern_set*, float, int=20);
+   int backpropagation_until(double, network&, pattern_set&, float, int=20);
 };
 
 #endif

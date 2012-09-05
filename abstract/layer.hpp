@@ -66,7 +66,7 @@ public:
   /**
    *@brief operator ostream << layer*
    */
-  friend std::ostream & operator<<(std::ostream&, layer*);
+  friend std::ostream & operator<<(std::ostream&, layer&);
 
   /**
    *@brief operator <<

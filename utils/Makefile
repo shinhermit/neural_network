@@ -1,6 +1,6 @@
 #VARIABLES
 src= .
-inc= -I.
+inc= -I. -I../inc -I../abstract -I../heavy_net
 obj= ../obj
 flags= -Wall -g
 cc= g++
@@ -18,5 +18,13 @@ synaptic: unit
 	mv $@.o $(obj)
 
 synaptics: synaptic
+	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
+	mv $@.o $(obj)
+
+models:
+	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
+	mv $@.o $(obj)
+
+funcs:
 	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
 	mv $@.o $(obj)

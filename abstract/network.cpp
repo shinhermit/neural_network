@@ -28,8 +28,8 @@ network & network::operator>>(std::ostream & out){
   return *this;
 }
 
-std::ostream & operator<<(std::ostream & out, network * net){
-  *net >> out;
+std::ostream & operator<<(std::ostream & out, network & net){
+  net >> out;
   return out;
 }
 
@@ -155,6 +155,14 @@ std::vector<float> network::output(){
 
 void network::reset(){
   std::cout<<"calling abstract network::reset()"<<std::endl;
+}
+
+void network::clear_connections(){
+  std::cout<<"calling abstract network::clear_connections()"<<std::endl;
+}
+
+void network::clear(){
+  std::cout<<"calling abstract network::clear()"<<std::endl;
 }
 
 void network::print(){

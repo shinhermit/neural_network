@@ -583,6 +583,15 @@ void heavy_network::reset(){
   }
 }
 
+void heavy_network::clear_connections(){
+  _connexions.clear();
+}
+
+void heavy_network::clear(){
+  _connexions.clear();
+  _deep_layers_clear();
+}
+
 void heavy_network::print(){
   int i, size;
 

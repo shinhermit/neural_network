@@ -65,7 +65,7 @@ public:
    *@brief operator <<
    *make it easy for polimorphism (pointers)
    */
-  friend std::ostream & operator<<(std::ostream&, neuron*);
+  friend std::ostream & operator<<(std::ostream&, neuron&);
 
   /**
    *@brief operator <<

@@ -35,7 +35,13 @@ synaptic:
 synaptics:
 	cd utils; make $@
 
-utils: unit synaptic synaptics
+models:
+	cd utils; make $@
+
+funcs:
+	cd utils; make $@
+
+utils: unit synaptic synaptics models funcs
 
 clean_utils_temp:
 	rm utils/*~
@@ -72,6 +78,10 @@ lights: light_neuron light_layer light_network
 clean_lights_temp:
 	rm light_net/*~
 
+##### Known architectures
+heavy_MLP:
+	cd known; make $@
+
 ##### learning algorithms
 
 pattern:
@@ -89,7 +99,7 @@ h_pattern_set:
 learning:
 	cd learn; make $@
 
-trainings: pattern pattern_set h_pattern h_pattern_set learn
+trainings: pattern pattern_set h_pattern h_pattern_set learning
 
 clean_trainings_temp:
 	rm learn/*~
@@ -113,6 +123,12 @@ test_layer: neuron layer heavy_neuron heavy_layer
 	cd tests; make $@
 
 test_network: abstracts utils heavies
+	cd tests; make $@
+
+test_models: abstracts utils heavies models
+	cd tests; make $@
+
+test_MLP: abstracts utils heavies models heavy_MLP
 	cd tests; make $@
 
 test_pattern: pattern h_pattern

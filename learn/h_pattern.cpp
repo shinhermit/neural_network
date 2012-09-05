@@ -79,28 +79,64 @@ h_pattern & h_pattern::receive_input(double value){
   return *this;
 }
 
-h_pattern & h_pattern::receive_ouput(float value){
+h_pattern & h_pattern::receive_output(float value){
   _outputs.push_back(value);
   return *this;
 }
 
-h_pattern & h_pattern::receive_input(std::vector<double> data){
+h_pattern & h_pattern::receive_inputs(std::vector<double> data){
   _inputs = data;
   return *this;
 }
 
-h_pattern & h_pattern::receive_ouput(std::vector<float> data){
+h_pattern & h_pattern::receive_outputs(std::vector<float> data){
   _outputs = data;
   return *this;
 }
 
-h_pattern & h_pattern::receive_input(std::istream & in){
-  std::cout<<"calling abstract method h_pattern::receive_input(std::istream&)"<<std::endl;
+h_pattern & h_pattern::receive_inputs(std::istream & in){
+  std::string line;
+  std::istringstream iss;
+  double val;
+
+  std::getline(in, line);
+  iss.str(line);
+
+  while(iss >> val){
+    _inputs.push_back(val);
+  }
+
   return *this;
 }
 
-h_pattern & h_pattern::receive_ouput(std::istream & in){
-  std::cout<<"calling abstract method h_pattern::receive_ouput(std::istream&)"<<std::endl;
+h_pattern & h_pattern::receive_outputs(std::istream & in){
+  std::string line;
+  std::istringstream iss;
+  float val;
+
+  std::getline(in, line);
+  iss.str(line);
+
+  while(iss >> val){
+    _outputs.push_back(val);
+  }
+
+  return *this;
+}
+
+h_pattern & h_pattern::clear_inputs(){
+  _inputs.clear();
+  return *this;
+}
+
+h_pattern & h_pattern::clear_outputs(){
+  _outputs.clear();
+  return *this;
+}
+
+h_pattern & h_pattern::clear(){
+  _inputs.clear();
+  _outputs.clear();
   return *this;
 }
 

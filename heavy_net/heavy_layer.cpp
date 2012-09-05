@@ -126,15 +126,15 @@ void heavy_layer::resize(int newsize){
   if(newsize>=0){
     oldsize = _neurons.size();
 
+    if(oldsize > 0)
+      ref_size = _neurons[0]->size();
+
     //if elements will removed
-    for(i=oldsize-1; i>=newsize; i++){
+    for(i=oldsize-1; i>=newsize; i--){
       delete _neurons[i];
     }
 
     _neurons.resize(newsize);
-
-    if(oldsize > 0)
-      ref_size = _neurons[0]->size();
 
     //if elements have been added
     for(i=oldsize+1; i<newsize; i++){

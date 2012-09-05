@@ -55,7 +55,7 @@ public:
   /**
    *@brief operator ostream << pattern
    */
-  friend std::ostream & operator<<(std::ostream&, pattern*);
+  friend std::ostream & operator<<(std::ostream&, pattern&);
 
   /**
    *@brief operator pattern<<double
@@ -91,31 +91,48 @@ public:
    *@brief receives (stores) a value as an expected output
    *@param value the expected result component to store
    */
-  virtual pattern & receive_ouput(float)=0;
+  virtual pattern & receive_output(float)=0;
 
   /**
    *@brief receives (stores) multiples values as inputs
    *@param data vector of values to store
    */
-  virtual pattern & receive_input(std::vector<double>)=0;
+  virtual pattern & receive_inputs(std::vector<double>)=0;
 
   /**
    *@brief receives (stores) multiple values as expected outputs
    *@param data the expected result components to store
    */
-  virtual pattern & receive_ouput(std::vector<float>)=0;
+  virtual pattern & receive_outputs(std::vector<float>)=0;
 
   /**
    *@brief receives (stores) inputs values from a stream
+   *reads line by line
    *@param in stream where we get the values
    */
-  virtual pattern & receive_input(std::istream&)=0;
+  virtual pattern & receive_inputs(std::istream&)=0;
 
   /**
    *@brief receives (stores) outputs values from a stream
+   *reads line by line
    *@param in stream where we get the values
    */
-  virtual pattern & receive_ouput(std::istream&)=0;
+  virtual pattern & receive_outputs(std::istream&)=0;
+
+  /**
+   *@brief clear all  (stored) inputs values
+   */
+  virtual pattern & clear_inputs()=0;
+
+  /**
+   *@brief clear all  (stored) outputs values
+   */
+  virtual pattern & clear_outputs()=0;
+
+  /**
+   *@brief clear all (stored) inputs and outputs values
+   */
+  virtual pattern & clear()=0;
 
   /**
    *@brief accesses the i-th input

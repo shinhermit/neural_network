@@ -21,8 +21,8 @@ neuron & neuron::operator>>(std::ostream & out){
   return *this;
 }
 
-std::ostream & operator<<(std::ostream & out, neuron * cell){
-  cell->operator>>(out);
+std::ostream & operator<<(std::ostream & out, neuron & cell){
+  cell >> out;
   return out;
 }
 

@@ -23,8 +23,8 @@ layer & layer::operator>>(std::ostream & out){
   return *this;
 }
 
-std::ostream & operator<<(std::ostream & out, layer * band){
-  *band >> out;
+std::ostream & operator<<(std::ostream & out, layer & band){
+  band >> out;
   return out;
 }
 
