@@ -26,8 +26,8 @@ pattern_set & pattern_set::operator>>(std::ostream & out){
   return *this;
 }
 
-std::ostream & operator<<(std::ostream & out, pattern_set * set){
-  *set >> out;
+std::ostream & operator<<(std::ostream & out, pattern_set & set){
+  set >> out;
   return out;
 }
 

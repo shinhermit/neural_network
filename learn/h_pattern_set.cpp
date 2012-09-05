@@ -80,14 +80,14 @@ h_pattern_set & h_pattern_set::operator>>(std::ostream & out){
   out << "{" << std::endl;
   size = _patterns.size();
   for(i=0; i<size; i++){
-    out << _patterns[i];
+    out << *_patterns[i];
   }
   out << "}" << std::endl;
   return *this;
 }
 
-std::ostream & operator<<(std::ostream & out, h_pattern_set & set){
-  set >> out;
+std::ostream & operator<<(std::ostream & out, h_pattern_set & p_set){
+  p_set >> out;
   return out;
 }
 

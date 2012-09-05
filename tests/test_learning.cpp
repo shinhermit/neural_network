@@ -10,7 +10,7 @@ int main(){
   network * p = new heavy_network();
   pattern_set * q = new h_pattern_set();
   ifstream ifile;
-  int i, N, inputs, size1, size2, size3;
+  int i, N, size1, size2;
   double alpha;
 
   try{
@@ -18,7 +18,7 @@ int main(){
   network & net = *p;
 
   cout<<endl<<"Building a MLP network..."<<endl;
-  cout << "Enter: input_layer_size  hidden_layer_size";
+  cout << "Enter: input_layer_size  hidden_layer_size ";
   cin >> size1 >> size2;
   models::build_heavy_MLP(net, 2, size1, size2, 1);
   cout << net;
@@ -27,6 +27,7 @@ int main(){
   pattern_set & examples = *q;
 
   ifile.open("res/xor");
+  if( ! ifile.is_open() ) cout<<"could not open file"<<endl;
   i = 0;
   while( !ifile.eof() ){
     examples << new h_pattern();
@@ -35,6 +36,8 @@ int main(){
     i++;
   }
   ifile.close();
+  cout << "Getting examples from file..."<<endl;
+  cout << examples;
 
   //evaluation before learning
   cout<<endl<<"Before learning..."<<endl;

@@ -46,7 +46,7 @@ public:
   /**
    *@brief polymorphic friend operator ostream<<pattern*
    */
-  friend std::ostream & operator<<(std::ostream&, pattern_set*);
+  friend std::ostream & operator<<(std::ostream&, pattern_set&);
 
   /**
    *@brief number of patterns in the set
