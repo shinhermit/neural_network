@@ -258,7 +258,7 @@ namespace learning
 
 	expected = examples[k]->output(i);
 
-	delta[last][i] = calculated * (1 - calculated) * (expected - calculated);
+	delta[last][i] = expected - calculated;
       }
 
       //the other layers
@@ -287,7 +287,7 @@ namespace learning
 	    forward_influence += delta[x][y] * net(x,y)->getWeight(w_i);
 	  }
 
-	  delta[j][i] = calculated * (1 - calculated) * forward_influence;
+	  delta[j][i] = calculated * (forward_influence - 1);
 	}
       }
       
@@ -303,7 +303,7 @@ namespace learning
 	}
 
 	for(p=0; p<num_of_weights; p++){
-	  w = net(0,i)->getWeight(p) + alpha * delta[0][i] * examples[k]->input(p);
+	  w = net(0,i)->getWeight(p) - alpha * delta[0][i] * examples[k]->input(p);
 	  net(0,i)->setWeight(p, w);
 	}
       }
@@ -324,7 +324,7 @@ namespace learning
 	    else x_i = 0;
  
 	    //correcting weight
-	    w = net(j,i)->getWeight(p) + alpha * delta[j][i] * x_i;
+	    w = net(j,i)->getWeight(p) - alpha * delta[j][i] * x_i;
 	    net(j,i)->setWeight(p, w);
 	  }
 	}
