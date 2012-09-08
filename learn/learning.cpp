@@ -271,7 +271,7 @@ namespace learning
 
 	expected = examples[k]->output(i);
 
-	delta[output][i] = -calculated * (1 - calculated) * (expected - calculated);
+	delta[output][i] = calculated * (1 - calculated) * (expected - calculated);
 
 #ifdef DEBUG
 	std::cout<<"Treating neuron "<<i<<". delta = "<<delta[output][i]<<std::endl;
@@ -325,7 +325,7 @@ namespace learning
 #endif
 	  }//for successor p
 
-	  delta[j][i] = -calculated * (1 - calculated) * forward_influence;
+	  delta[j][i] = calculated * (1 - calculated) * forward_influence;
 
 #ifdef DEBUG
 	  std::cout<<"Calculated delta = "<<delta[j][i]<<std::endl;
@@ -360,7 +360,7 @@ namespace learning
 #endif
 
 	for(p=0; p<num_of_weights; p++){
-	  w = net(input,i)->getWeight(p) - alpha * delta[input][i] * examples[k]->input(p);
+	  w = net(input,i)->getWeight(p) + alpha * delta[input][i] * examples[k]->input(p);
 	  net(input,i)->setWeight(p, w);
 
 #ifdef DEBUG
@@ -399,7 +399,7 @@ namespace learning
 	    else x_p = 0;
  
 	    //correcting weight
-	    w = net(j,i)->getWeight(p) - alpha * delta[j][i] * x_p;
+	    w = net(j,i)->getWeight(p) + alpha * delta[j][i] * x_p;
 	    net(j,i)->setWeight(p, w);
 
 #ifdef DEBUG
