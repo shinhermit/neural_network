@@ -223,13 +223,21 @@ namespace learning
   }
 
   void backpropagation(double alpha, network & net, pattern_set & examples){
-    int k, j, i, p, x, y, w_i, last, num_of_examples, num_of_layers, num_of_neurons, num_of_outputs, num_of_inputs, num_of_expected, num_of_weights;
+    int k, j, i, p, x, y, pos_w, input, output, num_of_examples, num_of_layers, num_of_neurons, num_of_outputs, num_of_inputs, num_of_expected, num_of_weights;
     std::vector< std::vector<double> > delta;
-    float calculated, expected, x_i;
+    float calculated, expected, x_p;
     double forward_influence, w;
     std::vector<unit> succ, pred;
 
     num_of_layers = net.size();
+
+    if(num_of_layers == 0){
+      throw std::string("exception! learning::back_propagation(double,network*,pattern_set*) : the network has no layer.");
+    }
+
+    input = 0;
+    output = num_of_layers - 1;
+
     num_of_examples = examples.size();
 
     delta = std::vector< std::vector<double> >(num_of_layers);
@@ -240,29 +248,24 @@ namespace learning
       net.evaluate();
 
       //the output layer
-      if(net.size() == 0){
-	throw std::string("exception! learning::back_propagation(double,network*,pattern_set*) : the network has no layer.");
-      }
-
-      last = net.size()-1;
-      num_of_outputs = net[last]->size();
+      num_of_outputs = net[output]->size();
       num_of_expected = examples[k]->outputs_size();
 
       if(num_of_outputs != num_of_expected){
 	throw std::string("exception! learning::back_propagation(double,network*,pattern_set*) : network outputs vector size does not match expected outputs vector size of one example");
       }
 
-      delta[last] = std::vector<double>(num_of_outputs);
+      delta[output] = std::vector<double>(num_of_outputs);
       for(i=0; i<num_of_outputs; i++){
-	calculated = net(last,i)->output();
+	calculated = net(output,i)->output();
 
 	expected = examples[k]->output(i);
 
-	delta[last][i] = calculated * (1 - calculated) * (expected - calculated);
+	delta[output][i] = -1*calculated * (1 - calculated) * (expected - calculated);
       }
 
       //the other layers
-      for(j=last-1; j>=0; j--){
+      for(j=output-1; j>=0; j--){
 	num_of_neurons = net[j]->size();
 	delta[j] = std::vector<double>(num_of_neurons);
 	for(i=0; i<num_of_neurons; i++){
@@ -278,13 +281,13 @@ namespace learning
 
 	    //finding the weight of the connection cell-->current successor
 	    pred = net.pred(x,y);
-	    w_i = find_in_pred( pred, unit(j,i) );
+	    pos_w = find_in_pred( pred, unit(j,i) );
 
-	    if(w_i == -1){
+	    if(pos_w == -1){
 	      throw std::string("exception! learning::back_propagation(double,network*,pattern_set*) found possible programming paradox: a unit does not appear in the predecessors list of one of his successors.");
 	    }
 
-	    forward_influence += delta[x][y] * net(x,y)->getWeight(w_i);
+	    forward_influence += delta[x][y] * net(x,y)->getWeight(pos_w);
 	  }
 
 	  delta[j][i] = calculated * (1 - calculated) * forward_influence;
@@ -295,7 +298,7 @@ namespace learning
       //input layer
       num_of_neurons = net[0]->size();
       for(i=0; i<num_of_neurons; i++){
-	num_of_weights = net(0,i)->size();
+	num_of_weights = net(input,i)->size();
 	num_of_inputs = examples[k]->inputs_size();
 
 	if(num_of_weights != num_of_inputs){
@@ -303,8 +306,8 @@ namespace learning
 	}
 
 	for(p=0; p<num_of_weights; p++){
-	  w = net(0,i)->getWeight(p) + alpha * delta[0][i] * examples[k]->input(p);
-	  net(0,i)->setWeight(p, w);
+	  w = net(input,i)->getWeight(p) - alpha * delta[input][i] * examples[k]->input(p);
+	  net(input,i)->setWeight(p, w);
 	}
       }
 
@@ -319,12 +322,12 @@ namespace learning
 	    if( pred.size() > 0 ){
 	      x = pred[p].layer();
 	      y = pred[p].pos();
-	      x_i = net(x,y)->output();
+	      x_p = net(x,y)->output();
 	    }
-	    else x_i = 0;
+	    else x_p = 0;
  
 	    //correcting weight
-	    w = net(j,i)->getWeight(p) + alpha * delta[j][i] * x_i;
+	    w = net(j,i)->getWeight(p) - alpha * delta[j][i] * x_p;
 	    net(j,i)->setWeight(p, w);
 	  }
 	}
