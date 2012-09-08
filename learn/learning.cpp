@@ -245,7 +245,8 @@ namespace learning
     for(k=0; k<num_of_examples; k++){
 
 #ifdef DEBUG
-      std::cout<<""<<std::endl;
+      std::cout<<"learning::back_propagation(double,network*,pattern_set*) : "<<std::endl<<"Begining learning on "<<num_of_examples<<" examples."<<std::endl;
+      std::cout<<"Considering example "<<k<<std::endl;
 #endif
 
       //evaluating the ouput of the network
@@ -263,7 +264,7 @@ namespace learning
       delta[output] = std::vector<double>(num_of_outputs);
 
 #ifdef DEBUG
-      std::cout<<""<<std::endl;
+      std::cout<<"Beginning calculation deltas of output layer = layer"<<output<<" ("<<num_of_outputs<<" neurons)"<<std::endl;
 #endif
       for(i=0; i<num_of_outputs; i++){
 	calculated = net(output,i)->output();
@@ -273,21 +274,21 @@ namespace learning
 	delta[output][i] = -calculated * (1 - calculated) * (expected - calculated);
 
 #ifdef DEBUG
-	std::cout<<""<<std::endl;
+	std::cout<<"Treating neuron "<<i<<". delta = "<<delta[output][i]<<std::endl;
 #endif
       }//for neuron i
 
       //the other layers
 
 #ifdef DEBUG
-      std::cout<<""<<std::endl;
+      std::cout<<"Beginning treatments for hidden layer, from "<<output-1<<" to 0"<<std::endl;
 #endif
       for(j=output-1; j>=0; j--){
 	num_of_neurons = net[j]->size();
 	delta[j] = std::vector<double>(num_of_neurons);
 
 #ifdef DEBUG
-	std::cout<<""<<std::endl;
+	std::cout<<"Treating layer "<<j<<" ("<<num_of_neurons<<" neurons)."<<std::endl;
 #endif
 
 	for(i=0; i<num_of_neurons; i++){
@@ -298,7 +299,8 @@ namespace learning
 	  succ = net.succ(j,i);
 
 #ifdef DEBUG
-	  std::cout<<""<<std::endl;
+	  std::cout<<"Treating neuron "<<i<<". calculated="<<calculated<<std::endl;
+	  std::cout<<"Calculating forward influence on "<<succ.size()<<" successors..."<<std::endl;
 #endif
 
 	  for(p=0; p<(int)succ.size(); p++){
@@ -314,19 +316,25 @@ namespace learning
 	      throw std::string("exception! learning::back_propagation(double,network*,pattern_set*) found possible programming paradox: a unit does not appear in the predecessors list of one of his successors.");
 	    }
 
-	    forward_influence += delta[x][y] * net(x,y)->getWeight(pos_w);
+	    w = net(x,y)->getWeight(pos_w);
+	    forward_influence += delta[x][y] * w;
 
 #ifdef DEBUG
-	    std::cout<<""<<std::endl;
+	    std::cout<<"Considering successor "<<p<<" which is ("<<x<<", "<<y<<") and connected by it's weight "<<pos_w<<" = "<<w<<std::endl;
+	    std::cout<<"forward_influence is now "<<forward_influence<<std::endl;
 #endif
 	  }//for successor p
 
 	  delta[j][i] = -calculated * (1 - calculated) * forward_influence;
 
+#ifdef DEBUG
+	  std::cout<<"Calculated delta = "<<delta[j][i]<<std::endl;
+#endif
+
 	}//for neuron i
 
 #ifdef DEBUG
-	std::cout<<""<<std::endl;
+	std::cout<<"Ending treatment of layer "<<j<<"........."<<std::endl;
 #endif
       }//for layer j
       
@@ -336,7 +344,7 @@ namespace learning
       num_of_neurons = net[input]->size();
 
 #ifdef DEBUG
-      std::cout<<""<<std::endl;
+      std::cout<<"Beginning weights correction of input layer ("<<num_of_neurons<<")"<<std::endl;
 #endif
       for(i=0; i<num_of_neurons; i++){
 	num_of_weights = net(input,i)->size();
@@ -348,7 +356,7 @@ namespace learning
 
 
 #ifdef DEBUG
-	std::cout<<""<<std::endl;
+	std::cout<<"Treating neuron "<<i<<" ("<<num_of_inputs<<" inputs)"<<std::endl;
 #endif
 
 	for(p=0; p<num_of_weights; p++){
@@ -356,29 +364,29 @@ namespace learning
 	  net(input,i)->setWeight(p, w);
 
 #ifdef DEBUG
-	  std::cout<<""<<std::endl;
+	  std::cout<<"Treating weight "<<p<<". w = net("<<input<<","<<i<<")->getWeight("<<p<<") - alpha * delta["<<input<<"]["<<i<<"] * examples["<<k<<"]->input("<<p<<")"<<std::endl<<"w = "<<net(input,i)->getWeight(p)<<" - "<<alpha<<" * "<<delta[input][i]<<" * "<<examples[k]->input(p)<<std::endl;
 #endif
 
 	}//for weight p
+      }//for neuron i
 
 #ifdef DEBUG
-	std::cout<<""<<std::endl;
+	std::cout<<"Ending treatment of output layer"<<std::endl;
 #endif
-      }//for neuron i
 
       //other layers
       for(j=1; j<num_of_layers; j++){
 	num_of_neurons = net[j]->size();
 
 #ifdef DEBUG
-	std::cout<<""<<std::endl;
+	std::cout<<"Beginning weights correction of layer "<<j<<" ("<<num_of_neurons<<" neurons)"<<std::endl;
 #endif
 
 	for(i=0; i<num_of_neurons; i++){
 	  num_of_weights = net(j,i)->size();
 
 #ifdef DEBUG
-	  std::cout<<""<<std::endl;
+	  std::cout<<"beginning treatment of neuron "<<i<<"("<<num_of_weights<<" inputs)"<<std::endl;
 #endif
 	  for(p=0; p<num_of_weights; p++){
 	    //finding the neuron that injects in weight p
@@ -395,18 +403,29 @@ namespace learning
 	    net(j,i)->setWeight(p, w);
 
 #ifdef DEBUG
-	    std::cout<<""<<std::endl;
+	    std::cout<<"Treating weight "<<p<<std::endl<<"w = net(j,i)->getWeight(p) - alpha * delta[j][i] * x_p"<<std::endl<<"w = "<<net(j,i)->getWeight(p)<<" - "<<alpha<<" * "<<delta[j][i]<<" * "<<x_p<<std::endl;
 #endif
 	  }//for weight p
 
 #ifdef DEBUG
-	  std::cout<<""<<std::endl;
+	  std::cout<<"Ending treatment of neuron "<<i<<std::endl;
 #endif
 
 	}// for neuron i
+
+#ifdef DEBUG
+	  std::cout<<"Ending treatment of layer "<<j<<std::endl;
+#endif
       }// for layer j
 
+#ifdef DEBUG
+	  std::cout<<"Ending treatment of example "<<k<<std::endl;
+#endif
     }//for example k
+
+#ifdef DEBUG
+    std::cout<<"Ending backprop algorithm "<<std::endl;
+#endif
   }
 
   int backpropagation_until(double alpha, network & net, pattern_set & examples, float error_limit, int max_steps){
