@@ -16,11 +16,10 @@ namespace models
    *Any pre-existant content will be cleared
    *The architecture is input_layer - hidden_layer - output_layer
    *@param num_of_inputs
-   *@param num_of_input_cells
-   *@param num_of_hidden
-   *@param num_of_ouput
+   *@param hidden_layer_size
+   *@param output_layer_size
    */
-  void build_heavy_MLP(network&, int,int, int, int);
+  void build_heavy_MLP(network&, int,int, int);
 };
 
 #endif

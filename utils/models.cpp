@@ -22,13 +22,12 @@ namespace models
     }
   }
 
-  void build_heavy_MLP(network & net, int num_of_inputs, int num_of_input_cells, int num_of_hidden, int num_of_output){
+  void build_heavy_MLP(network & net, int num_of_inputs, int hidden_layer_size, int output_layer_size){
 
     net.clear();
 
-    net << new heavy_layer(num_of_input_cells, num_of_inputs);
-    net << new heavy_layer(num_of_hidden, num_of_input_cells);
-    net << new heavy_layer(num_of_output, num_of_hidden);
+    net << new heavy_layer(hidden_layer_size, num_of_inputs);
+    net << new heavy_layer(output_layer_size, hidden_layer_size);
 
     connect_MLP(net);
   }

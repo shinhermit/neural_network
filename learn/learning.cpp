@@ -261,7 +261,7 @@ namespace learning
 
 	expected = examples[k]->output(i);
 
-	delta[output][i] = -1*calculated * (1 - calculated) * (expected - calculated);
+	delta[output][i] = -calculated * (1 - calculated) * (expected - calculated);
       }
 
       //the other layers
@@ -290,7 +290,7 @@ namespace learning
 	    forward_influence += delta[x][y] * net(x,y)->getWeight(pos_w);
 	  }
 
-	  delta[j][i] = calculated * (1 - calculated) * forward_influence;
+	  delta[j][i] = -calculated * (1 - calculated) * forward_influence;
 	}
       }
       
@@ -302,7 +302,7 @@ namespace learning
 	num_of_inputs = examples[k]->inputs_size();
 
 	if(num_of_weights != num_of_inputs){
-	  throw std::string("exception! learning::back_propagation(double,network*,pattern_set*): size of an input neuron is greater than size of inputs vectro of an example.");
+	  throw std::string("exception! learning::back_propagation(double,network*,pattern_set*): size of an input neuron is greater than size of inputs vector of an example.");
 	}
 
 	for(p=0; p<num_of_weights; p++){

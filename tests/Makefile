@@ -40,5 +40,11 @@ test_pattern:
 test_pattern_set:
 	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
 
-test_learning:
+test_xor:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_xor2:
+	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+
+test_xor3:
 	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out

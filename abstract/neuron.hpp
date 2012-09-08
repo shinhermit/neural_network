@@ -14,7 +14,7 @@
 #include <vector>
 #include <cmath>
 #include <cstdlib>
-#include <ctime>
+#include "activation.hpp"
 #include "neurals.hpp"
 
 /**

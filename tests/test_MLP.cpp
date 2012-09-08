@@ -12,7 +12,7 @@ int main(){
   network & net = *p;
   network & mlp = *q;
 
-  net << new heavy_layer(2,3) << new heavy_layer(3,2) << new heavy_layer(2,3);
+  net << new heavy_layer(4,3) << new heavy_layer(2,4);
   models::connect_MLP(net);
 
   mlp = net;

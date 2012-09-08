@@ -41,7 +41,10 @@ models:
 funcs:
 	cd utils; make $@
 
-utils: unit synaptic synaptics models funcs
+activation:
+	cd utils; make $@
+
+utils: unit synaptic synaptics models funcs activation
 
 clean_utils_temp:
 	rm utils/*~
@@ -116,10 +119,10 @@ test_synaptic: unit synaptic
 test_synaptics: utils
 	cd tests; make $@
 
-test_neuron: neuron heavy_neuron
+test_neuron: activation neuron heavy_neuron
 	cd tests; make $@
 
-test_layer: neuron layer heavy_neuron heavy_layer
+test_layer: activation neuron layer heavy_neuron heavy_layer
 	cd tests; make $@
 
 test_network: abstracts utils heavies
@@ -137,7 +140,13 @@ test_pattern: pattern h_pattern
 test_pattern_set: pattern pattern_set h_pattern h_pattern_set
 	cd tests; make $@
 
-test_learning: abstracts utils heavies trainings
+test_xor: abstracts utils heavies trainings
+	cd tests; make $@
+
+test_xor2: abstracts utils heavies trainings
+	cd tests; make $@
+
+test_xor3: abstracts utils heavies trainings
 	cd tests; make $@
 
 all_tests: test_neuron test_layer test_unit test_synaptic test_network test_pattern test_learning

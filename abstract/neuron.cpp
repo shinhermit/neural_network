@@ -1,7 +1,7 @@
 #include "neuron.hpp"
 
 float neuron::_activation(double buffered){
-  return 1/(1 + exp(-1*buffered));
+  return activation::sigmoid(buffered);
 }
 
 neuron::neuron(int nbr_of_inputs){}

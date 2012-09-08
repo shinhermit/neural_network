@@ -28,3 +28,7 @@ models:
 funcs:
 	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
 	mv $@.o $(obj)
+
+activation:
+	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
+	mv $@.o $(obj)
