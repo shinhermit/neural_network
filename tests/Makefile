@@ -8,43 +8,43 @@ cc= g++
 
 #CIBLES
 
-all: 
+cmd = $(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
 
 test_unit:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_synaptic:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_synaptics:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_neuron:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_layer:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_network:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_models:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_MLP:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_pattern:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_pattern_set:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_xor:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_xor2:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)
 
 test_xor3:
-	$(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+	$(cmd)

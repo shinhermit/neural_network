@@ -6,17 +6,15 @@ flags= -Wall -g
 cc= g++
 
 #CIBLES
+cmd = $(cc) -c $(inc) $(flags) $(src)/$@.cpp; mv $@.o $(obj)
 
 all: heavy_neuron heavy_layer heavy_network
 
 heavy_neuron:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp	
-	mv $@.o $(obj)
+	$(cmd)
 
 heavy_layer:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
 heavy_network:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)

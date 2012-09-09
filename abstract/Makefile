@@ -7,16 +7,15 @@ cc= g++
 
 #CIBLES
 
+cmd = $(cc) -c $(inc) $(flags) $(src)/$@.cpp; mv $@.o $(obj)
+
 all: neuron layer network
 
 neuron:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
 layer:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
 network:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)

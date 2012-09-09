@@ -7,28 +7,22 @@ cc= g++
 
 #CIBLES
 
-all: synaptic
+cmd = $(cc) -c $(inc) $(flags) $(src)/$@.cpp; mv $@.o $(obj)
 
 unit:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
-synaptic: unit
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+synaptic:
+	$(cmd)
 
-synaptics: synaptic
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+synaptics:
+	$(cmd)
 
 models:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
 funcs:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
 activation:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)

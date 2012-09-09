@@ -7,22 +7,19 @@ cc= g++
 
 #CIBLES
 
+cmd = $(cc) -c $(inc) $(flags) $(src)/$@.cpp; mv $@.o $(obj)
+
 pattern:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
 pattern_set:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
 h_pattern:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
 h_pattern_set:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)
 
 learning:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp
-	mv $@.o $(obj)
+	$(cmd)

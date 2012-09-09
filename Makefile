@@ -1,167 +1,197 @@
 #VARIABLES
 obj= obj
 exe= .
-flags= -Wall -g
-cc= g++
 
 #CIBLES
 
-all: abstracts utils heavies lights trainings all_tests
+all: abstracts utils heavies lights knowns trainings all_tests
 
 ##### abstracts
 
+abs_dir = abstract
+
+abs_cmd = cd $(abs_dir); make $@
+
 neuron:
-	cd abstract; make $@
+	$(abs_cmd)
 
 layer:
-	cd abstract; make $@
+	$(abs_cmd)
 
 network:
-	cd abstract; make $@
+	$(abs_cmd)
 
 abstracts: neuron layer network
 
 clean_abstracts_temp:
-	rm abstract/*~
+	rm -f $(abs_dir)/*~
 
 ##### Utilities classes
 
+util_dir = utils
+
+util_cmd = cd $(util_dir); make $@
+
 unit:
-	cd utils; make $@
+	$(util_cmd)
 
 synaptic:
-	cd utils; make $@
+	$(util_cmd)
 
 synaptics:
-	cd utils; make $@
+	$(util_cmd)
 
 models:
-	cd utils; make $@
+	$(util_cmd)
 
 funcs:
-	cd utils; make $@
+	$(util_cmd)
 
 activation:
-	cd utils; make $@
+	$(util_cmd)
 
 utils: unit synaptic synaptics models funcs activation
 
 clean_utils_temp:
-	rm utils/*~
+	rm -f $(util_dir)/*~
 
 ##### inner data classes (heavy network)
 
+hvy_dir = heavy_net
+
+hvy_cmd = cd $(hvy_dir); make $@
+
 heavy_neuron:
-	cd heavy_net; make $@
+	$(hvy_cmd)
 
 heavy_layer:
-	cd heavy_net; make $@
+	$(hvy_cmd)
 
 heavy_network:
-	cd heavy_net; make $@
+	$(hvy_cmd)
 
 heavies: heavy_neuron heavy_layer heavy_network
 
 clean_heavies_temp:
-	rm heavy_net/*~
+	rm -f $(hvy_dir)/*~
 
 ##### data base classes (light network)
+## this is just the set-up, no implementation yet
+
+lt_dir = light_net
+
+lt_cmd = cd $(lt_dir); make $@ 
 
 light_neuron:
-	cd light_network; make $@
+	$(lt_cmd)
 
 light_layer:
-	cd light_network; make $@
+	$(lt_cmd)
 
 light_network:
-	cd light_network; make $@
+	$(lt_cmd)
 
 lights: light_neuron light_layer light_network
 
 clean_lights_temp:
-	rm light_net/*~
+	rm -f $(lt_dir)/*~
 
 ##### Known architectures
+knw_dir = known
+
+knw_cmd = cd $(knw_dir); make $@
+
 heavy_MLP:
-	cd known; make $@
+	$(knw_cmd)
+
+knwons: heavy_MLP
+
+clean_known_temp:
+	rm -f $(knw_dir)/*~
 
 ##### learning algorithms
+trg_dir = learn
+
+trg_cmd = cd $(trg_dir); make $@
 
 pattern:
-	cd learn; make $@
+	$(trg_cmd)
 
 pattern_set:
-	cd learn; make $@
+	$(trg_cmd)
 
 h_pattern:
-	cd learn; make $@
+	$(trg_cmd)
 
 h_pattern_set:
-	cd learn; make $@
+	$(trg_cmd)
 
 learning:
-	cd learn; make $@
+	$(trg_cmd)
 
 trainings: pattern pattern_set h_pattern h_pattern_set learning
 
 clean_trainings_temp:
-	rm learn/*~
+	rm -f $(trg_dir)/*~
 
 #### tests
+tst_dir = tests
 
+tst_cmd = cd $(tst_dir); make $@
 
 test_unit: unit
-	cd tests; make $@
+	$(tst_cmd)
 
 test_synaptic: unit synaptic
-	cd tests; make $@
+	$(tst_cmd)
 
 test_synaptics: utils
-	cd tests; make $@
+	$(tst_cmd)
 
 test_neuron: activation neuron heavy_neuron
-	cd tests; make $@
+	$(tst_cmd)
 
 test_layer: activation neuron layer heavy_neuron heavy_layer
-	cd tests; make $@
+	$(tst_cmd)
 
 test_network: abstracts utils heavies
-	cd tests; make $@
+	$(tst_cmd)
 
 test_models: abstracts utils heavies models
-	cd tests; make $@
+	$(tst_cmd)
 
 test_MLP: abstracts utils heavies models heavy_MLP
-	cd tests; make $@
+	$(tst_cmd)
 
 test_pattern: pattern h_pattern
-	cd tests; make $@
+	$(tst_cmd)
 
 test_pattern_set: pattern pattern_set h_pattern h_pattern_set
-	cd tests; make $@
+	$(tst_cmd)
 
 test_xor: abstracts utils heavies trainings
-	cd tests; make $@
+	$(tst_cmd)
 
 test_xor2: abstracts utils heavies trainings
-	cd tests; make $@
+	$(tst_cmd)
 
 test_xor3: abstracts utils heavies trainings
-	cd tests; make $@
+	$(tst_cmd)
 
-all_tests: test_neuron test_layer test_unit test_synaptic test_network test_pattern test_learning
+all_tests: test_neuron test_layer test_unit test_synaptic test_synaptics test_network test_models test_MLP test_pattern test_pattern_set test_xor test_xor2 test_xor3
 
 clean_tests_temp:
-	rm tests/*~
+	rm -f $(tst_dir)/*~
 
 ##### cleaning
 
-cleantemp: clean_abstracts_temp clean_utils_temp clean_heavies_temp clean_lights_temp clean_trainings_temp clean_tests_temp
+cleantemp: clean_abstracts_temp clean_utils_temp clean_heavies_temp clean_lights_temp clean_known_temp clean_trainings_temp clean_tests_temp
+	rm -f res/*~ inc/*~
 
 cleanobj:
-	rm $(obj)/*.o
+	rm -f $(obj)/*.o
 
 distclean:
-	rm $(exe)/*.out
+	rm -f $(exe)/*.out
 
 cleanall: cleantemp cleanobj distclean

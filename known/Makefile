@@ -7,8 +7,9 @@ cc= g++
 
 #CIBLES
 
+cmd = $(cc) -c $(inc) $(flags) $(src)/$@.cpp; mv $@.o $(obj)
+
 all: heavy_MLP
 
 heavy_MLP:
-	$(cc) -c $(inc) $(flags) $(src)/$@.cpp	
-	mv $@.o $(obj)
+	$(cmd)
