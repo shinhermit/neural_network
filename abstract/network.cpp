@@ -165,6 +165,14 @@ void network::clear(){
   std::cout<<"calling abstract network::clear()"<<std::endl;
 }
 
+void network::save(std::ostream&){
+  std::cout<<"calling abstract network::save(std::ostream&)"<<std::endl;
+}
+
+void network::load(std::istream&){
+  std::cout<<"calling abstract network::load(std::istream&)"<<std::endl;
+}
+
 void network::print(){
   std::cout<<"calling abstract network::print()"<<std::endl;
 }

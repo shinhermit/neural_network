@@ -449,6 +449,14 @@ void heavy_MLP::clear(){
   _deep_layers_clear();
 }
 
+void heavy_MLP::save(std::ostream&){
+  
+}
+
+void heavy_MLP::load(std::istream&){
+  
+}
+
 void heavy_MLP::print(){
   int i, size;
 

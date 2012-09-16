@@ -1,48 +1,44 @@
-#include <iostream>
-#include "unit.hpp"
+#include "test_unit.hpp"
 
-using namespace std;
-
-int main(){
+void test_unit(std::vector<std::string> & args){
   int i, layer, position;
   unit units[3];
 
   //asking data for 3 units to the user
-  cout<<endl<<"Creation of 3 units..."<<endl;
+  std::cout<<std::endl<<"Creation of 3 units..."<<std::endl;
   for(i=0; i<3; i++){
-    cout<<"layer where the unit "<<i+1<<" is: ";
-    cin>>layer;
-    cout<<"position in the layer: ";
-    cin>>position;
+    std::cout<<"layer where the unit "<<i+1<<" is: ";
+    std::cin>>layer;
+    std::cout<<"position in the layer: ";
+    std::cin>>position;
     units[i] = unit(layer,position);
   }
 
-  cout<<endl<<"Comparing the units..."<<endl;
-  cout<<"unit1 == unit2 : ";
+  std::cout<<std::endl<<"Comparing the units..."<<std::endl;
+  std::cout<<"unit1 == unit2 : ";
   if(units[0] == units[1])
-    cout<<"true"<<endl;
+    std::cout<<"true"<<std::endl;
   else
-    cout<<"false"<<endl;
+    std::cout<<"false"<<std::endl;
 
-  cout<<"unit1 < unit3 : ";
+  std::cout<<"unit1 < unit3 : ";
   if(units[0] < units[2])
-    cout<<"true"<<endl;
+    std::cout<<"true"<<std::endl;
   else
-    cout<<"false"<<endl;
+    std::cout<<"false"<<std::endl;
 
-  cout<<"unit2 >= unit3 : ";
+  std::cout<<"unit2 >= unit3 : ";
   if(units[1] >= units[2])
-    cout<<"true"<<endl;
+    std::cout<<"true"<<std::endl;
   else
-    cout<<"false"<<endl;
+    std::cout<<"false"<<std::endl;
 
-  cout<<endl<<"printing units ..."<<endl;
-  cout<<"1: "; units[0].print(); cout<<endl;
-  cout<<"2: "<<units[1]<<endl;
-  cout<<"3: "<<units[2]<<endl;
+  std::cout<<std::endl<<"printing units ..."<<std::endl;
+  std::cout<<"1: "; units[0].print(); std::cout<<std::endl;
+  std::cout<<"2: "<<units[1]<<std::endl;
+  std::cout<<"3: "<<units[2]<<std::endl;
 
-  cout<<endl<<"unsing layer() and pos() observers ..."<<endl;
-  cout<<"1: layer() -> "<<units[0].layer()<<" | pos() -> "<<units[0].pos()<<endl;
+  std::cout<<std::endl<<"unsing layer() and pos() observers ..."<<std::endl;
+  std::cout<<"1: layer() -> "<<units[0].layer()<<" | pos() -> "<<units[0].pos()<<std::endl;
 
-  return 0;
 }

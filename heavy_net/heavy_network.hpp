@@ -340,6 +340,16 @@ public:
   void clear();
 
   /**
+   *@brief writes the state of the neuron to a file (any output stream actually)
+   */
+  void save(std::ostream&);
+
+  /**
+   *@brief loads the state of the neuron from a file (any input stream actually)
+   */
+  void load(std::istream&);
+
+  /**
    *@brief prints the current state of the neuron
    *useful for testing
    */

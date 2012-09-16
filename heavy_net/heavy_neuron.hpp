@@ -11,6 +11,7 @@
 #define HEAVY_NEURON_HPP
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <cmath>
 #include <cstdlib>
@@ -194,6 +195,16 @@ public:
    *@param value new value
    */
   void setWeight(int, double);
+
+  /**
+   *@brief writes the state of the neuron to a file (any output stream actually)
+   */
+  void save(std::ostream&);
+
+  /**
+   *@brief loads the state of the neuron from a file (any input stream actually)
+   */
+  void load(std::istream&);
 
   /**
    *@brief prints the current state of the heavy_neuron

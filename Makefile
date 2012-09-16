@@ -4,7 +4,7 @@ exe= .
 
 #CIBLES
 
-all: abstracts utils heavies lights knowns trainings all_tests
+all: dashboard
 
 ##### abstracts
 
@@ -157,8 +157,18 @@ test_layer: activation neuron layer heavy_neuron heavy_layer
 test_network: abstracts utils heavies
 	$(tst_cmd)
 
-test_models: abstracts utils heavies models
+test_MLP_model: abstracts utils heavies models
 	$(tst_cmd)
+
+## not implemented yet
+test_hopfield_model: abstracts utils heavies models
+	$(tst_cmd)
+
+test_kohonen_model: abstracts utils heavies models
+	$(tst_cmd)
+## end not implemented yet
+
+test_models: test_MLP_model #test_hopfield_model test_kohonen_model
 
 test_MLP: abstracts utils heavies models heavy_MLP
 	$(tst_cmd)
@@ -169,16 +179,13 @@ test_pattern: pattern h_pattern
 test_pattern_set: pattern pattern_set h_pattern h_pattern_set
 	$(tst_cmd)
 
-test_xor: abstracts utils heavies trainings
+test_backprop: abstracts utils heavies trainings
 	$(tst_cmd)
 
-test_xor2: abstracts utils heavies trainings
-	$(tst_cmd)
+all_tests: test_neuron test_layer test_unit test_synaptic test_synaptics test_network test_models test_MLP test_pattern test_pattern_set test_backprop
 
-test_xor3: abstracts utils heavies trainings
+dashboard: all_tests
 	$(tst_cmd)
-
-all_tests: test_neuron test_layer test_unit test_synaptic test_synaptics test_network test_models test_MLP test_pattern test_pattern_set test_xor test_xor2 test_xor3
 
 clean_tests_temp:
 	rm -f $(tst_dir)/*~

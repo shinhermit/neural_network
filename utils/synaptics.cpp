@@ -70,6 +70,53 @@ void synaptics::remove(int pos){
   }
 }
 
+void synaptics::save(std::ostream & ofile){  
+  int i, size;
+
+  ofile << "{" << std::endl;
+
+  size = _synapses.size();
+  for(i=0; i < size; i++){
+    _synapses[i].save(ofile);
+    ofile << std::endl;
+  }
+
+  ofile << "}" << std::endl;
+}
+
+void synaptics::load(std::istream & ifile){
+  int i;
+  std::string line, begin_synaptics, end_synaptics;
+  std::istringstream iss;
+  synaptic synapse;
+
+  begin_synaptics = "{";
+  end_synaptics = "}";
+
+  while( ifile.good() && line == "" ){
+    std::getline(ifile, line);
+  }
+
+  if(line == begin_synaptics){
+
+    _synapses.clear();
+
+    while( ifile.good() && line != end_synaptics ){
+
+      std::getline(ifile, line);
+      iss.clear();
+      iss.str(line);
+      synapse.load(iss);
+      _synapses.push_back(synapse);
+    }
+
+  }
+  else{
+    ifile.unget();
+  }
+
+}
+
 void synaptics::print(){
   int i, size;
 

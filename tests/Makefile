@@ -5,46 +5,52 @@ obj= ../obj
 exe= ..
 flags= -Wall -g
 cc= g++
+cmd_exe=
 
 #CIBLES
 
-cmd = $(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
+cmd_obj = $(cc) -c $(inc) $(flags) $(src)/$@.cpp; mv $@.o $(obj)
+
+cmd_exe = $(cc) $(inc) $(flags) $(obj)/*.o $(src)/$@.cpp -o $(exe)/$@.out
 
 test_unit:
-	$(cmd)
+	$(cmd_obj)
 
 test_synaptic:
-	$(cmd)
+	$(cmd_obj)
 
 test_synaptics:
-	$(cmd)
+	$(cmd_obj)
 
 test_neuron:
-	$(cmd)
+	$(cmd_obj)
 
 test_layer:
-	$(cmd)
+	$(cmd_obj)
 
 test_network:
-	$(cmd)
+	$(cmd_obj)
 
-test_models:
-	$(cmd)
+test_MLP_model:
+	$(cmd_obj)
+
+test_hopfield_model:
+	$(cmd_obj)
+
+test_kohonen_model:
+	$(cmd_obj)
 
 test_MLP:
-	$(cmd)
+	$(cmd_obj)
 
 test_pattern:
-	$(cmd)
+	$(cmd_obj)
 
 test_pattern_set:
-	$(cmd)
+	$(cmd_obj)
 
-test_xor:
-	$(cmd)
+test_backprop:
+	$(cmd_obj)
 
-test_xor2:
-	$(cmd)
-
-test_xor3:
-	$(cmd)
+dashboard:
+	$(cmd_exe)

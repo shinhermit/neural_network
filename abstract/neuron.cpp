@@ -105,6 +105,14 @@ void neuron::setWeight(int i, double value){
   std::cout<<"calling method neuron::setWeight(int,double) of abstract class neuron"<<std::endl;
 }
 
+void neuron::save(std::ostream&){
+  std::cout<<"calling abstract neuron::save(std::ostream&)"<<std::endl;
+}
+
+void neuron::load(std::istream&){
+  std::cout<<"calling abstract neuron::load(std::istream&)"<<std::endl;
+}
+
 void neuron::print(){
   std::cout<<"calling method neuron::print() of abstract class neuron"<<std::endl;
 }

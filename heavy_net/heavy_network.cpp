@@ -592,6 +592,52 @@ void heavy_network::clear(){
   _deep_layers_clear();
 }
 
+void heavy_network::save(std::ostream & ofile){
+  int i, size;
+
+  size = _layers.size();
+  for(i=0; i < size; i++){
+    _layers[i]->save(ofile);
+
+    ofile << std::endl;
+
+    if( _connexions.count(i) ){
+      _connexions[i].save(ofile);
+    }
+    else{
+      ofile << "{}"<<std::endl;
+    }
+    ofile << std::endl;
+  }
+}
+
+void heavy_network::load(std::istream & ifile){
+  int i;
+  layer * l;
+  synaptics s;
+  std::string empty_line;
+
+  clear();
+
+  i=0;
+  while( ifile.good() ){
+    l = new heavy_layer();
+    l->load(ifile);
+    if(l->size() > 0){
+      _layers.push_back(l);
+    }
+    else{
+      delete l;
+    }
+
+    s.load(ifile);
+    if(s.size() > 0)
+      _connexions.insert( std::pair<int,synaptics>(i,s) );
+
+    i++;
+  }
+}
+
 void heavy_network::print(){
   int i, size;
 

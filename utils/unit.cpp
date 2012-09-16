@@ -62,6 +62,21 @@ int unit::layer()const{return _layer;}
 
 int unit::pos()const{return _pos;}
 
+void unit::save(std::ostream & ofile){  
+  ofile<<_layer<<" "<<_pos;
+}
+
+void unit::load(std::istream & ifile){
+  _layer = 0;
+  _pos = 0;
+
+  if( ifile.good() )
+    ifile >> _layer;
+
+  if( ifile.good() )
+    ifile >> _pos;
+}
+
 void unit::print(){
   std::cout<<"(layer: "<<_layer<<", position: "<<_pos<<")";
 }

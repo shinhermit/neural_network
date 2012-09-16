@@ -1,59 +1,55 @@
-#include <iostream>
-#include "synaptic.hpp"
+#include "test_synaptic.hpp"
 
-using namespace std;
-
-int main(){
+void test_synaptic(std::vector<std::string> & args){
   int i, layer, position;
   unit src, dst;
   synaptic synapses[3];
 
   //asking data for 3 connections to the user
-  cout<<endl<<"Creation of 3 connections..."<<endl;
+  std::cout<<std::endl<<"Creation of 3 connections..."<<std::endl;
   for(i=0; i<3; i++){
-    cout<<"connection "<<i+1<<endl;
+    std::cout<<"connection "<<i+1<<std::endl;
 
-    cout<<"layer where the source unit is: ";
-    cin>>layer;
-    cout<<"position in the layer: ";
-    cin>>position;
+    std::cout<<"layer where the source unit is: ";
+    std::cin>>layer;
+    std::cout<<"position in the layer: ";
+    std::cin>>position;
     src = unit(layer, position);
 
-    cout<<"layer where the destination unit is: ";
-    cin>>layer;
-    cout<<"position in the layer: ";
-    cin>>position;
+    std::cout<<"layer where the destination unit is: ";
+    std::cin>>layer;
+    std::cout<<"position in the layer: ";
+    std::cin>>position;
     dst = unit(layer, position);
 
     synapses[i] = synaptic(src, dst);
   }
 
-  cout<<endl<<"Comparing the connections..."<<endl;
-  cout<<"synapse1 == synapse2 : ";
+  std::cout<<std::endl<<"Comparing the connections..."<<std::endl;
+  std::cout<<"synapse1 == synapse2 : ";
   if(synapses[0] == synapses[1])
-    cout<<"true"<<endl;
+    std::cout<<"true"<<std::endl;
   else
-    cout<<"false"<<endl;
+    std::cout<<"false"<<std::endl;
 
-  cout<<"synapse1 < synapse3 : ";
+  std::cout<<"synapse1 < synapse3 : ";
   if(synapses[0] < synapses[2])
-    cout<<"true"<<endl;
+    std::cout<<"true"<<std::endl;
   else
-    cout<<"false"<<endl;
+    std::cout<<"false"<<std::endl;
 
-  cout<<"synapse2 <= synapse3 : ";
+  std::cout<<"synapse2 <= synapse3 : ";
   if(synapses[1] <= synapses[2])
-    cout<<"true"<<endl;
+    std::cout<<"true"<<std::endl;
   else
-    cout<<"false"<<endl;
+    std::cout<<"false"<<std::endl;
 
-  cout<<endl<<"printing synapses ..."<<endl;
-  cout<<"1: "<<synapses[0]<<endl;
-  cout<<"2: "<<synapses[1]<<endl;
-  cout<<"3: "<<synapses[2]<<endl;
+  std::cout<<std::endl<<"printing synapses ..."<<std::endl;
+  std::cout<<"1: "<<synapses[0]<<std::endl;
+  std::cout<<"2: "<<synapses[1]<<std::endl;
+  std::cout<<"3: "<<synapses[2]<<std::endl;
 
-  cout<<endl<<"unsing layer(), source() and dest() observers ..."<<endl;
-  cout<<"1: layer() -> "<<synapses[0].layer()<<" | source() -> "<<synapses[0].source()<<" | dest() -> "<<synapses[0].dest()<<endl;
+  std::cout<<std::endl<<"unsing layer(), source() and dest() observers ..."<<std::endl;
+  std::cout<<"1: layer() -> "<<synapses[0].layer()<<" | source() -> "<<synapses[0].source()<<" | dest() -> "<<synapses[0].dest()<<std::endl;
 
-  return 0;
 }

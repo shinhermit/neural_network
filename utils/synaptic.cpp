@@ -64,6 +64,17 @@ unit & synaptic::source(){return _src;}
 
 unit & synaptic::dest(){return _dst;}
 
+void synaptic::save(std::ostream & ofile){  
+  _src.save(ofile);
+  ofile << std::endl;
+  _dst.save(ofile);
+}
+
+void synaptic::load(std::istream & ifile){
+  _src.load(ifile);
+  _dst.load(ifile);
+}
+
 void synaptic::print(){
   std::cout<<"{";
   _src.print();

@@ -175,6 +175,49 @@ void heavy_neuron::setWeight(int i, double value){
   else throw std::string("heavy_neuron::setWeight(int, double) : weight index extends unit size");
 }
 
+void heavy_neuron::save(std::ostream & ofile){
+  int i;
+
+  ofile<<_size<<" ";
+
+  for(i=0; i <= _size; i++)
+    ofile<<_weights[i]<<" ";
+
+  ofile<<_index<<" "<<_buffer<<" "<<_output;
+}
+
+void heavy_neuron::load(std::istream & ifile){
+  std::string line;
+  int i, size;
+
+  size = 0;
+
+  if( ifile.good() ){
+    
+    ifile >> size;
+
+    if(size > _size) _weights.resize(size+1);
+
+    if(size > 0) _size = size;
+
+    i=0;
+    while( ifile.good() && i<=_size ){
+      ifile >> _weights[i];
+      i++;
+    }
+
+    if( ifile.good() )
+      ifile >> _index;
+
+    if( !ifile.good() )
+      ifile >> _buffer;
+
+    if( !ifile.good() )
+      ifile >> _output;
+  }
+
+}
+
 void heavy_neuron::print(){
   int i;
 

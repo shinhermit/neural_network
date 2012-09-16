@@ -223,6 +223,60 @@ void heavy_layer::reset(){
   }
 }
 
+void heavy_layer::save(std::ostream & ofile){
+  int i, size;
+
+  ofile << "[" << std::endl;
+
+  size = _neurons.size();
+  for(i=0; i < size; i++){
+    _neurons[i]->save(ofile);
+    ofile << std::endl;
+  }
+
+  ofile << "]";
+}
+
+void heavy_layer::load(std::istream & ifile){
+  std::string line, begin_layer, end_layer;
+  std::istringstream iss;
+  bool layer_closed;
+  neuron * cell;
+
+  begin_layer = "[";
+  end_layer = "]";
+
+  line = "";
+  while( ifile.good() && line == "" ){
+    std::getline(ifile, line);
+  }
+
+  if(line == begin_layer){
+    _deep_clear();
+    layer_closed = false;
+
+    while( ifile.good() && !layer_closed ){
+      std::getline(ifile, line);
+
+      if(line == end_layer){
+	layer_closed = true;
+      }
+      else{
+	cell = new heavy_neuron();
+	iss.clear();
+	iss.str(line);
+	cell->load(iss);
+	_neurons.push_back(cell);
+      }
+
+    }//end while !layer_closed
+
+  }//end if line=="["
+  else{
+    ifile.unget();
+  }
+}
+
 void heavy_layer::print(){
   int i, size;
 

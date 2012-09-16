@@ -1,11 +1,5 @@
-#include "heavy_network.hpp"
-#include "heavy_MLP.hpp"
-#include "models.hpp"
-#include "funcs.hpp"
-
-using namespace std;
-
-int main(){
+#include "test_MLP.hpp"
+void test_MLP(std::vector<std::string>&){
   network * p = new heavy_network();
   network * q = new heavy_MLP();
 
@@ -17,25 +11,24 @@ int main(){
 
   mlp = net;
 
-  cout<<endl<<"Creating two different kinds of MLP with the same states..."<<endl;
-  cout<<"network1:"<<endl;
-  cout << net;
-  cout<<"network2:"<<endl;
-  cout << mlp;
+  std::cout<<std::endl<<"Creating two different kinds of MLP with the same states..."<<std::endl;
+  std::cout<<"network1:"<<std::endl;
+  std::cout << net;
+  std::cout<<"network2:"<<std::endl;
+  std::cout << mlp;
 
-  cout<<endl<<"Running evaluations on inputs 4.0 2.3 1.1..."<<endl;
+  std::cout<<std::endl<<"Running evaluations on inputs 4.0 2.3 1.1..."<<std::endl;
   net << 4.0 << 2.3 << 1.1;
   mlp << 4.0 << 2.3 << 1.1;
   net.evaluate();
   mlp.evaluate();
 
-  cout<<"network1:"<<endl;
+  std::cout<<"network1:"<<std::endl;
   funcs::print_output(net);
-  cout<<endl<<"network2:"<<endl;
+  std::cout<<std::endl<<"network2:"<<std::endl;
   funcs::print_output(mlp);
 
   delete p;
   delete q;
 
-  return 0;
 }

@@ -2,15 +2,6 @@
 
 namespace funcs
 {
-
-  float sigmoid(double x){
-    return 1/( 1 + exp(-x) );
-  }
-
-  float sigmoid_derivative(double x){
-    return sigmoid(x) * ( 1 - sigmoid(x) );
-  }
-
   void print_output(network & net){
     int i, size;
     std::vector<float> output;
@@ -24,5 +15,33 @@ namespace funcs
       std::cout<<output[i];
     std::cout<<"]"<<std::endl;
   }
+
+
+  int find_args(int argc, char** argv, std::string param_tag){
+    int i;
+    bool found;
+
+    if(argc > 1){
+      i = 0;
+      found = false;
+      while( i < argc && !found ){
+
+	if( strcmp( argv[i], param_tag.c_str() ) != 0 ){
+	  found = true;
+	}
+	else{
+	  i++;
+	}
+      }
+
+      return i+2;
+
+    }
+    else{
+      return -1;
+    }
+
+  }
+
 };
 

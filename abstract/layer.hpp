@@ -152,6 +152,16 @@ public:
    */
   virtual void reset()=0;
 
+  /**
+   *@brief writes the state of the neuron to a file (any output stream actually)
+   */
+  virtual void save(std::ostream&)=0;
+
+  /**
+   *@brief loads the state of the neuron from a file (any input stream actually)
+   */
+  virtual void load(std::istream&)=0;
+
 
   /**
    *@brief prints the current state of the neuron

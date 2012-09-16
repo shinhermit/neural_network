@@ -87,6 +87,15 @@ void layer::reset(){
   std::cout<<"calling abstract layer::reset()"<<std::endl;
 }
 
+void layer::save(std::ostream&){
+  std::cout<<"calling abstract layer::save(std::ostream&)"<<std::endl;
+}
+
+void layer::load(std::istream&){
+  std::cout<<"calling abstract layer::load(std::istream&)"<<std::endl;
+}
+
+
 void layer::print(){
   std::cout<<"calling abstract layer::print()"<<std::endl;
 }
