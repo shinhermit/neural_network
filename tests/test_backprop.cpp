@@ -16,7 +16,7 @@ void evaluate_few_examples(network & net, pattern_set & set, int how_many){
 
     std::cout << "Results of hidden layers:"<<std::endl;
     net_size = net.size();
-    for(k=0; k < net_size-1; k++){
+    for(k=0; k < net_size - 1; k++){
       output = net[k]->output();
       std::cout << "[";
       easyContainers::print_vector<float>(output);
@@ -151,7 +151,7 @@ void test_backprop(std::map<std::string,std::string> & args){
 
   //now we begin
 
-  // models::connect_MLP(net);
+  models::connect_MLP(net);
   std::cout << "Building MLP model from generic network.... "<<std::endl;
   std::cout << net;
 
