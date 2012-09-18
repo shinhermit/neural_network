@@ -1,5 +1,5 @@
 #include "test_MLP.hpp"
-void test_MLP(std::vector<std::string>&){
+void test_MLP(std::map<std::string,std::string>&){
   network * p = new heavy_network();
   network * q = new heavy_MLP();
 

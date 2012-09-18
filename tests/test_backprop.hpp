@@ -21,6 +21,6 @@ void evaluate_few_examples(network&, pattern_set&, int);
  *@brief
  *@param args parameter specified by the user (parsed from command line)
  */
-void test_backprop(std::vector<std::string>&);
+void test_backprop(std::map<std::string,std::string>&);
 
 #endif

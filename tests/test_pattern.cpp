@@ -1,6 +1,6 @@
 #include "test_pattern.hpp"
 
-void test_pattern(std::vector<std::string> & args){
+void test_pattern(std::map<std::string,std::string> & args){
   pattern * p;
 
   std::cout<<std::endl<<std::endl<<"Creating empty example..."<<std::endl;

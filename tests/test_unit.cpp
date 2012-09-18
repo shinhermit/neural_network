@@ -1,6 +1,6 @@
 #include "test_unit.hpp"
 
-void test_unit(std::vector<std::string> & args){
+void test_unit(std::map<std::string,std::string> & args){
   int i, layer, position;
   unit units[3];
 

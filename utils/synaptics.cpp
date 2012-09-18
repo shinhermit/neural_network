@@ -86,33 +86,43 @@ void synaptics::save(std::ostream & ofile){
 
 void synaptics::load(std::istream & ifile){
   int i;
-  std::string line, begin_synaptics, end_synaptics;
+  std::string line, begin_synaptics, end_synaptics, buffer;
   std::istringstream iss;
   synaptic synapse;
+  bool synaptics_closed;
 
+  buffer = "res/#synaptics";
   begin_synaptics = "{";
   end_synaptics = "}";
 
-  while( ifile.good() && line == "" ){
+  while( ifile.good() && line != begin_synaptics ){
     std::getline(ifile, line);
   }
 
-  if(line == begin_synaptics){
-
+  if( ifile.good() ){
     _synapses.clear();
+  }
 
-    while( ifile.good() && line != end_synaptics ){
+  synaptics_closed = false;
+  while( ifile.good() && !synaptics_closed ){
 
-      std::getline(ifile, line);
-      iss.clear();
-      iss.str(line);
-      synapse.load(iss);
-      _synapses.push_back(synapse);
+    std::getline(ifile, line);
+
+    try{
+      if(line == end_synaptics){
+	synaptics_closed = true;
+      }
+      else{
+	iss.clear();
+	iss.str(line);
+	synapse.load(iss);
+	_synapses.push_back(synapse);
+      }
+    }
+    catch(std::string & e){
+      throw std::string("exception! synaptics::load(std::istream&) : synapse.load(iss) failed.\n")+e;
     }
 
-  }
-  else{
-    ifile.unget();
   }
 
 }

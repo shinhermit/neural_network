@@ -3,9 +3,9 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
+#include <map>
 #include "synaptics.hpp"
 
-void test_synaptics(std::vector<std::string>&);
+void test_synaptics(std::map<std::string,std::string>&);
 
 #endif

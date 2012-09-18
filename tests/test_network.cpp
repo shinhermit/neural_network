@@ -1,6 +1,6 @@
 #include "test_network.hpp"
 
-void test_network(std::vector<std::string> & args){
+void test_network(std::map<std::string,std::string> & args){
   network* p;
   int i;
   std::string filename;

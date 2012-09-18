@@ -187,33 +187,47 @@ void heavy_neuron::save(std::ostream & ofile){
 }
 
 void heavy_neuron::load(std::istream & ifile){
-  std::string line;
   int i, size;
 
   size = 0;
 
-  if( ifile.good() ){
-    
-    ifile >> size;
+  if( ifile.good() ){    
+    if( !(ifile >> size) ){
+      throw std::string("exception! heavy_neuron::load(std::istream&) : ifile>>size failed");
+    }
+  }
 
-    if(size > _size) _weights.resize(size+1);
+  if(ifile.good()  && size > _size){
+    _weights.resize(size+1);
+    _size = size;
+  }
 
-    if(size > 0) _size = size;
+  i=0;
+  while( ifile.good() && i <= _size ){
 
-    i=0;
-    while( ifile.good() && i<=_size ){
-      ifile >> _weights[i];
-      i++;
+    if( !(ifile >> _weights[i]) ){
+      throw std::string("exception! heavy_neuron::load(std::istream&) : ifile>>weight[i] failed");
     }
 
-    if( ifile.good() )
-      ifile >> _index;
+    i++;
+  }
 
-    if( !ifile.good() )
-      ifile >> _buffer;
+  if( ifile.good() ){
+    if( !(ifile >> _index) ){
+      throw std::string("exception! heavy_neuron::load(std::istream&) : ifile>> _index failed");
+    }
+  }
 
-    if( !ifile.good() )
-      ifile >> _output;
+  if( !ifile.good() ){
+    if( !(ifile >> _buffer) ){
+      throw std::string("exception! heavy_neuron::load(std::istream&) : ifile>> __buffer failed");
+    }
+  }
+
+  if( !ifile.good() ){
+    if( !(ifile >> _output) ){
+      throw std::string("exception! heavy_neuron::load(std::istream&) : ifile>> _output failed");
+    }
   }
 
 }

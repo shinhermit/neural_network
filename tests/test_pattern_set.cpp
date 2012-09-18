@@ -1,6 +1,6 @@
 #include "test_pattern_set.hpp"
 
-void test_pattern_set(std::vector<std::string> & args){
+void test_pattern_set(std::map<std::string,std::string> & args){
   pattern_set *  p = new h_pattern_set();
 
   pattern_set & pset = *p;

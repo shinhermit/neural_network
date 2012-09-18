@@ -2,9 +2,9 @@
 #define TEST_SYNAPTIC
 
 #include <iostream>
-#include <vector>
+#include <map>
 #include "synaptic.hpp"
 
-void test_synaptic(std::vector<std::string>&);
+void test_synaptic(std::map<std::string,std::string>&);
 
 #endif

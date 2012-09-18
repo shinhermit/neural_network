@@ -246,17 +246,20 @@ void heavy_layer::load(std::istream & ifile){
   begin_layer = "[";
   end_layer = "]";
 
-  line = "";
-  while( ifile.good() && line == "" ){
+  while( ifile.good() && line != begin_layer ){
     std::getline(ifile, line);
   }
 
-  if(line == begin_layer){
+  if( ifile.good() ){
     _deep_clear();
-    layer_closed = false;
+  }
 
-    while( ifile.good() && !layer_closed ){
-      std::getline(ifile, line);
+  layer_closed = false;
+  while( ifile.good() && !layer_closed ){
+
+    std::getline(ifile, line);
+
+    try{
 
       if(line == end_layer){
 	layer_closed = true;
@@ -269,12 +272,13 @@ void heavy_layer::load(std::istream & ifile){
 	_neurons.push_back(cell);
       }
 
-    }//end while !layer_closed
+    }
+    catch(std::string e){
+      delete cell;
+      throw std::string("exception! heavy_layer::load(std::istream&) : cell->load(iss) failed\n")+e;
+    }
 
-  }//end if line=="["
-  else{
-    ifile.unget();
-  }
+  }//end while !layer_closed
 }
 
 void heavy_layer::print(){

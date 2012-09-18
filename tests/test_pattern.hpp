@@ -4,8 +4,9 @@
 #include "h_pattern.hpp"
 
 #include <fstream>
+#include <map>
 #include <sstream>
 
-void test_pattern(std::vector<std::string>&);
+void test_pattern(std::map<std::string,std::string>&);
 
 #endif

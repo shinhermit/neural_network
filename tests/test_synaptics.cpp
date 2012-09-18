@@ -1,6 +1,6 @@
 #include "test_synaptics.hpp"
 
-void test_synaptics(std::vector<std::string> & args){
+void test_synaptics(std::map<std::string,std::string> & args){
   int i, layer, position;
   unit src, dst;
   synaptics synapses;

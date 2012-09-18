@@ -3,7 +3,7 @@
 
 #include <cstring>
 #include <string>
-#include <vector>
+#include <map>
 #include "funcs.hpp"
 #include "learning.hpp"
 #include "easyContainers.hpp"
@@ -40,7 +40,7 @@ void show_menu();
  *@param args DR variable where we store the arguments (everything after -a
  *@return bool true if all options are valid, false elsewise (must show help ie function usage() )
  */
-bool parse_cmd_line(int, char**, std::string&, std::string & program, std::vector<std::string> & args);
+bool parse_cmd_line(int, char**, std::string&, std::string & program, std::map<std::string,std::string> & args);
 
 /**
  *@brief execute the selected program

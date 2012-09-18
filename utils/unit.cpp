@@ -67,14 +67,26 @@ void unit::save(std::ostream & ofile){
 }
 
 void unit::load(std::istream & ifile){
-  _layer = 0;
-  _pos = 0;
+  int j,i;
 
-  if( ifile.good() )
-    ifile >> _layer;
+  if( ifile.good() ){
+    if(ifile >> j){
+      _layer = j;
+    }
+    else{
+      throw std::string("exception! unit::load(std::istream&) : ifile>>_layer failed.");
+    }
+  }
 
-  if( ifile.good() )
-    ifile >> _pos;
+  if( ifile.good() ){
+    if(ifile >> i){
+      _pos = i;
+    }
+    else{
+      throw std::string("exception! unit::load(std::istream&) : ifile>>_pos failed.");
+    }
+  }
+
 }
 
 void unit::print(){

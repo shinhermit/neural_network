@@ -42,8 +42,14 @@ void usage(){
   cout<<"        -a data_file"<<endl;
 
   cout<<endl<<"    backpop : train a MLP network with backpropagation"<<endl;
-  cout<<"        -a training_data_file learning_rate layer_size,neurons_size..."<<endl;
-  cout<<"          ex: ./dashboard.out -p backprop -a res/xor2 0.6 5 2 4 5"<<endl;
+  cout<<"        -f net_file a file thats contains the structure of the network architecture"<<endl;
+  cout<<"                Caution: the -l option will modify the structure read by the -f option"<<endl;
+  cout<<"        -e examples_file a file thats contains the structure of the network architecture"<<endl;
+  cout<<"        -r rate (double) value of the learning rate"<<endl;
+  cout<<"        -l layer_size neurons_size    add layers"<<endl;
+  cout<<"                Caution: the -l option will modify the structure read by the -f option"<<endl;
+  cout<<"          ex: ./dashboard.out -p backprop -e res/xor2 -r 0.6 -l 5 2 -l 4 5"<<endl;
+  cout<<"          ex: ./dashboard.out -p backprop -f res/network.net -e res/xor2 -r 0.6"<<endl;
 
   cout << endl;
 
@@ -64,63 +70,21 @@ void show_menu(){
   cout<<"p[A]ttern class test"<<endl;
   cout<<"pa[T]tern set class test"<<endl;
   cout<<"[B]ackprop learning programs from res files"<<endl;
- }
-
-bool parse_cmd_line(int argc, char** argv, string & prog, vector<string> & args){
-  int i, k;
-  bool allright, goHead;
-
-  allright = true;
-  prog = string();
-  args = vector<string>();
-
-  if(argc > 1){
-    i = 0;
-    while(i < argc){
-
-      //unknown option
-      if( argv[i][0] == '-' && strcmp(argv[i], "-p") != 0  &&  strcmp(argv[i], "-a") != 0  &&  strcmp(argv[i], "--help") != 0){
-	allright = false;
-      }
-
-      if( strcmp(argv[i], "--help") == 0 ){
-	allright = false; //we want to show usage()
-      }
-
-      if( strcmp(argv[i], "-p") == 0 ){
-	if(i+1 < argc){
-	  if(argv[i+1][0] != '-'){
-	    prog = string(argv[i+1]);
-	  }
-	}
-      }
-
-      if( strcmp(argv[i], "-a") == 0){
-	k = i + 1;
-	goHead = true;
-	while(k < argc && goHead){
-	  if( argv[k][0] == '-' ){
-	    goHead = false;
-	  }
-	  else{
-	    args.push_back( string(argv[k]) );
-	  }
-
-	  k++;
-	}
-
-      }//end if "-p"
-
-      i++;
-    }
-
-  }//end if argc > 1
-
-  return allright;
-
 }
 
-bool apply_choice(string & prog, vector<string> & args){
+string extract_prog_name(map<string,string> & args){
+  string prog;
+
+  if( args.count("-p") ){
+    prog = args["-p"];
+
+    args.erase( args.find("-p") );
+  }
+
+  return prog;
+}
+
+bool apply_choice(string prog, map<string,string> & args){
   bool doWeQuit;
 
   map<string,int> choice = easyContainers::create_map<string,int>("q",0)("u",1)("unit",1)("s",2)("synaptic",2)("y",3)("synaptics",3)("n",4)("neuron",4)("l",5)("layer",5)("e",6)("network",6)("m",7)("mlp_model",7)("p",8)("mlp",8)("a",9)("pattern",9)("t",10)("pattern_set",10)("b",11)("backprop",11)("h",12)(" ",-1);
@@ -173,7 +137,7 @@ bool apply_choice(string & prog, vector<string> & args){
     usage();
     break;
   default:
-    cout<<endl<<"Unknown selection. Please, enter the letter in [] for each option."<<endl<<"For example, enter 'q' to quit"<<endl;
+    cout<<endl<<"Unknown selection \""<<prog<<"\". Please, enter the letter in [] for each option."<<endl<<"For example, enter 'q' to quit"<<endl;
   }
 
   return doWeQuit;
@@ -182,21 +146,31 @@ bool apply_choice(string & prog, vector<string> & args){
 
 int main(int argc, char** argv){
   string prog;
-  vector<string> args;
+  map<string,string> args;
   bool quit;
 
-  if( !parse_cmd_line(argc, argv, prog, args) ){
-    usage();
-  }
+  try{
+    funcs::parse_cmd_line(argc, argv, args);
 
-  if( prog.size() != 0 ){
-    quit = apply_choice(prog, args);
-  }
+    if( args.count("--help") ){
+      usage();
+    }
 
-  while(!quit){
-    show_menu();
-    cin >> prog;
-    quit = apply_choice(prog, args);
+    prog = extract_prog_name(args);
+
+    if( prog.size() > 0 ){
+      quit = apply_choice(prog, args);
+    }
+
+    while(!quit){
+      show_menu();
+      cin >> prog;
+      quit = apply_choice(prog, args);
+    }
+
+  }
+  catch(std::string e){
+    cout << "Caught " << e <<endl;
   }
 
   return 0;

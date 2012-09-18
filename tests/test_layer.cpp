@@ -1,6 +1,6 @@
 #include "test_layer.hpp"
 
-void test_layer(std::vector<std::string> & args){
+void test_layer(std::map<std::string,std::string> & args){
   layer *p, *q;
   std::vector<double> data1, data2, data3;
   std::vector<float> output;

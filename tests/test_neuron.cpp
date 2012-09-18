@@ -4,7 +4,7 @@ double weighted_sum(double a, double w_a, double b, double w_b, double c, double
   return a*w_a + b*w_b + c*w_c - biais;
 }
 
-void test_neuron(std::vector<std::string> & args){
+void test_neuron(std::map<std::string,std::string> & args){
   std::ofstream ofile;
   std::ifstream ifile;
   std::string filename;

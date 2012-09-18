@@ -71,8 +71,20 @@ void synaptic::save(std::ostream & ofile){
 }
 
 void synaptic::load(std::istream & ifile){
+
+  try{
   _src.load(ifile);
+  }
+  catch(std::string e){
+    throw std::string("exception! synaptic::load(std::istream&) : _src.load(ifile) failed\n")+e;
+  }
+
+  try{
   _dst.load(ifile);
+  }
+  catch(std::string & e){
+    throw std::string("exception! synaptic::load(std::istream&) : _src.load(ifile) failed\n")+e;
+  }
 }
 
 void synaptic::print(){

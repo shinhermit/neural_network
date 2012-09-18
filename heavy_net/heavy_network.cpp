@@ -605,7 +605,7 @@ void heavy_network::save(std::ostream & ofile){
       _connexions[i].save(ofile);
     }
     else{
-      ofile << "{}"<<std::endl;
+      ofile << "{"<<std::endl<<"}"<<std::endl;
     }
     ofile << std::endl;
   }
@@ -621,18 +621,30 @@ void heavy_network::load(std::istream & ifile){
 
   i=0;
   while( ifile.good() ){
-    l = new heavy_layer();
-    l->load(ifile);
-    if(l->size() > 0){
-      _layers.push_back(l);
+    try{
+      l = new heavy_layer();
+      l->load(ifile);
+      if(l->size() > 0){
+	_layers.push_back(l);
+      }
+      else{
+	delete l;
+	l = NULL;
+      }
     }
-    else{
-      delete l;
+    catch(std::string & e){
+      if(l) delete l;
+      throw std::string("exception! heavy_network::load(std::istream&) : l->load(ifile)  failed\n")+e;
     }
 
-    s.load(ifile);
-    if(s.size() > 0)
-      _connexions.insert( std::pair<int,synaptics>(i,s) );
+    try{
+      s.load(ifile);
+      if(s.size() > 0)
+	_connexions.insert( std::pair<int,synaptics>(i,s) );
+    }
+    catch(std::string & e){
+      throw std::string("exception! heavy_network::load(std::istream&) : s.load(ifile) failed\n")+e;
+    }
 
     i++;
   }

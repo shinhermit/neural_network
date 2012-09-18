@@ -5,6 +5,6 @@
 #include <fstream>
 #include "heavy_network.hpp"
 
-void test_network(std::vector<std::string>&);
+void test_network(std::map<std::string,std::string>&);
 
 #endif

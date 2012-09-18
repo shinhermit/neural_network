@@ -6,6 +6,6 @@
 #include "models.hpp"
 #include "funcs.hpp"
 
-void test_MLP(std::vector<std::string>&);
+void test_MLP(std::map<std::string,std::string>&);
 
 #endif

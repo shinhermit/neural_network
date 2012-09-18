@@ -3,6 +3,6 @@
 
 #include "models.hpp"
 
-void test_MLP_model(std::vector<std::string>&);
+void test_MLP_model(std::map<std::string,std::string>&);
 
 #endif

@@ -1,6 +1,6 @@
 #include "test_MLP_model.hpp"
 
-void test_MLP_model(std::vector<std::string> & args){
+void test_MLP_model(std::map<std::string,std::string> & args){
   network * p = new heavy_network();
 
   network & net = *p;
