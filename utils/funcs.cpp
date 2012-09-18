@@ -52,9 +52,12 @@ namespace funcs
     while(i < argc){
       if(argv[i][0] == '-'){
 
-	  k = i + 1;
-	if(i+1 < argc){
-	  option = argv[i];
+	option = argv[i];
+	value = "";
+	args.insert( std::pair<std::string,std::string>(option,value) );
+
+	k = i + 1;
+	if(k < argc){
 	  goHead = true;
 	  while(k < argc && goHead){
 
@@ -65,11 +68,11 @@ namespace funcs
 
 	      value = argv[k];
 
-	      if( args.count(option) ){
+	      if( args[option] != "" ){
 		args[option] += " " + value;
 	      }
 	      else{
-		args.insert( std::pair<std::string,std::string>(option,value) );
+		args[option] = value;
 	      }
 
 	      k++;
